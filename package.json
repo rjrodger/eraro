@@ -1,0 +1,23 @@
+{
+  "name": "eraro",
+  "version": "0.1.0",
+  "description": "Create JavaScript Error objects with code strings, context details, and uncluttered stacktraces",
+  "main": "eraro.js",
+  "scripts": {
+    "test": "node test/eraro.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rjrodger/eraro.git"
+  },
+  "keywords": [
+    "eraro",
+    "error"
+  ],
+  "author": "Richard Rodger (http://richardrodger.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rjrodger/eraro/issues"
+  },
+  "homepage": "https://github.com/rjrodger/eraro"
+}
