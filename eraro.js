@@ -38,8 +38,9 @@ function cleanstack( error, markers ) {
 module.exports = function( options ) {
   options = options || {}
 
-  var packaje = options.package || 'unknown'
-  var markers = options.markers || []
+  var msgprefix = options.package ? options.package+': ' : ''
+  var packaje   = options.package || 'unknown'
+  var markers   = options.markers || []
 
   var filename = module.filename
   if( filename ) markers.push(filename)
@@ -50,7 +51,7 @@ module.exports = function( options ) {
 
   return function ( code, msg, details ) {
     code    = 'string' === typeof(code)    ? code    : 'unknown'
-    msg     = 'string' === typeof(msg)     ? msg     : code
+    msg     = msgprefix + ('string' === typeof(msg) ? msg : code)
     details = 'object' === typeof(details) ? details : {}
 
     var e = new Error(msg)

@@ -1,6 +1,6 @@
 {
   "name": "eraro",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create JavaScript Error objects with code strings, context details, and uncluttered stacktraces",
   "main": "eraro.js",
   "scripts": {
