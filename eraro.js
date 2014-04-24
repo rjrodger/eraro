@@ -51,8 +51,13 @@ module.exports = function( options ) {
 
   return function ( code, msg, details ) {
     code    = 'string' === typeof(code)    ? code    : 'unknown'
+
+    details = 
+      ('object' === typeof(details)) ? 
+      details : 
+      ('object' === typeof(msg) && 'string' !== typeof(msg) ? msg : {});
+
     msg     = msgprefix + ('string' === typeof(msg) ? msg : code)
-    details = 'object' === typeof(details) ? details : {}
 
     var e = new Error(msg)
 

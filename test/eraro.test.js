@@ -21,7 +21,7 @@ assert.equal('c1',e1.code)
 assert.equal(1,e1.details.a)
 
 var e2 = eraro('c2',{a:2})
-assert.equal("{ [Error: foo: c2] foo: true, package: 'foo', code: 'c2', details: {} }",util.inspect(e2))
+assert.equal("{ [Error: foo: c2] foo: true, package: 'foo', code: 'c2', details: { a: 2 } }",util.inspect(e2))
 
 
 var e3 = eraro('c3')
