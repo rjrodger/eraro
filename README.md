@@ -28,6 +28,10 @@ throw error('code_string', 'Message text.', {foo:1, bar:2})
 
 throw error('code_string', {foo:1, bar:2})
 
+
+// extend and existing Error object
+var ex = new Error('Another message.')
+throw error(ex,'code_string',{details:'data'})
 ```
 
 The Error object has the following additional properties:
@@ -42,7 +46,7 @@ The Error object has the following additional properties:
 
 If you're using this module, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
 
-Current Version: 0.1.2
+Current Version: 0.1.3
 
 Tested on: node 0.10.26
 

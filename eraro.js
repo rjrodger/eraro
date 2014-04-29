@@ -2,6 +2,8 @@
 "use strict";
 
 
+var util = require('util')
+
 
 
 // Remove unwanted lines containing markers
@@ -49,7 +51,17 @@ module.exports = function( options ) {
   if( parentfilename ) markers.push(parentfilename)
 
 
-  return function ( code, msg, details ) {
+  return function( ex, code, msg, details ) {
+    var internalex = false
+
+    if( !util.isError(ex) ) {
+      internalex = true
+      ex         = null
+      code       = arguments[0]
+      msg        = arguments[1]
+      details    = arguments[2]
+    }
+
     code    = 'string' === typeof(code)    ? code    : 'unknown'
 
     details = 
@@ -59,18 +71,22 @@ module.exports = function( options ) {
 
     msg     = msgprefix + ('string' === typeof(msg) ? msg : code)
 
-    var e = new Error(msg)
+    if( !ex ) {
+      ex = new Error(msg)
+    }
 
-    e[packaje] = true
-    e.package  = packaje
+    ex[packaje] = true
+    ex.package  = packaje
 
-    e.code    = code
-    e.details = details || {}
+    ex.code    = code
+    ex.details = details || {}
 
     // clean the stack
-    e.stack = cleanstack( e, markers )
+    if( internalex ) {
+      ex.stack = cleanstack( ex, markers )
+    }
 
-    return e;
+    return ex;
   }
 }
 

@@ -12,7 +12,6 @@ var eraro = require('..')({package:'foo'})
 
 
 var e1 = eraro('c1','m1',{a:1})
-//console.log(e1)
 
 assert.equal('foo: m1',e1.message)
 assert.equal('foo',e1.package)
@@ -30,3 +29,18 @@ assert.equal("{ [Error: foo: c3] foo: true, package: 'foo', code: 'c3', details:
 
 var e4 = eraro()
 assert.equal("{ [Error: foo: unknown] foo: true, package: 'foo', code: 'unknown', details: {} }",util.inspect(e4))
+
+
+var x0 = new Error('x0')
+var e5 = eraro(x0)
+assert.equal("{ [Error: x0] foo: true, package: 'foo', code: 'unknown', details: {} }",util.inspect(e5))
+
+
+var x1 = new Error('x1')
+var e6 = eraro(x1,'c4')
+assert.equal("{ [Error: x1] foo: true, package: 'foo', code: 'c4', details: {} }",util.inspect(e6))
+
+
+var x2 = new Error('x2')
+var e7 = eraro(x2,'c5',{a:3})
+assert.equal("{ [Error: x2] foo: true, package: 'foo', code: 'c5', details: { a: 3 } }",util.inspect(e7))
