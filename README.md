@@ -114,7 +114,9 @@ with the default settings.
 If you specify a message directly, this is also interpreted as a template:
 
 ```JavaScript
-var err0 = error('code2','My custom message, details: <%=util.inspect(zed)%>', {zed:{a:1,b:2}})
+var err0 = error('code2',
+                 'My custom message, details: <%=util.inspect(zed)%>', 
+                 {zed:{a:1,b:2}})
 "mylib: My custom message, details: { a: 1, b: 2 }" === err0.message
 ```
 
@@ -136,7 +138,14 @@ message template, overriding any matching code message.
 
 
 
-### Support
+# In the Wild
+
+For real-world usage examples, see:
+
+  * _[use-plugin](http://github.com/rjrodger/use-plugin)_: a utility for providing a plugin interface for extensions to your module
+
+
+# Support
 
 If you're using this module, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
 
