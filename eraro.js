@@ -28,6 +28,7 @@ module.exports = eraro
 // 
 //   * _options_ : (optional) Object; properties:
 //      * _package_ : (optional) String; package name to mark Error objects
+//      * _prefix_ : (optional) Boolean/String; If false, then no prefix is used; If not defined, the package name is used.
 //      * _module_ : (optional) Object; _module_ object to use as starting point for _require_ calls
 //      * _msgmap_ : (optional) Object; map codes to message templates 
 //
@@ -52,7 +53,9 @@ module.exports = eraro
 function eraro( options ) {
   options = options || {}
 
-  var msgprefix  = options.package ? options.package+': ' : ''
+  var msgprefix  = false === options.prefix ? '' : 
+        (_.isString(options.prefix) ? options.prefix : _.isString(options.package) ? options.package+': ' : '')
+
   var packaje    = options.package || 'unknown'
   var callmodule = options.module  || module
   var msgmap     = options.msgmap  || {}

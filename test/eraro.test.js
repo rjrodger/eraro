@@ -60,3 +60,12 @@ assert.equal("foo: <%=foo(1)%> VALUES:{ code: \'b0\' } TEMPLATE ERROR: TypeError
 var d0 = eraro('d0','<%=a.b%>', {a:{b:99}})
 assert.equal("foo: 99",d0.message)
 assert.ok(d0.callpoint.indexOf("eraro/test/eraro.test.js:"))
+
+
+
+var bar0 = require('..')({package:'bar',prefix:'BAR-'})
+assert.equal('BAR-code0',bar0('code0').message)
+
+
+var bar1 = require('..')({package:'bar',prefix:false})
+assert.equal('code1',bar1('code1').message)
