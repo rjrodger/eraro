@@ -107,6 +107,7 @@
 <ul>
 <li><em>options</em> : (optional) Object; properties:<ul>
 <li><em>package</em> : (optional) String; package name to mark Error objects</li>
+<li><em>prefix</em> : (optional) Boolean/String; If false, then no prefix is used; If not defined, the package name is used.</li>
 <li><em>module</em> : (optional) Object; <em>module</em> object to use as starting point for <em>require</em> calls</li>
 <li><em>msgmap</em> : (optional) Object; map codes to message templates </li>
 </ul>
@@ -136,7 +137,9 @@ The returned Error object has the following additional properties:</p>
             <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">eraro</span><span class="hljs-params">( options )</span> {</span>
   options = options || {}
 
-  <span class="hljs-keyword">var</span> msgprefix  = options.package ? options.package+<span class="hljs-string">': '</span> : <span class="hljs-string">''</span>
+  <span class="hljs-keyword">var</span> msgprefix  = <span class="hljs-literal">false</span> === options.prefix ? <span class="hljs-string">''</span> : 
+        (_.isString(options.prefix) ? options.prefix : _.isString(options.package) ? options.package+<span class="hljs-string">': '</span> : <span class="hljs-string">''</span>)
+
   <span class="hljs-keyword">var</span> packaje    = options.package || <span class="hljs-string">'unknown'</span>
   <span class="hljs-keyword">var</span> callmodule = options.module  || module
   <span class="hljs-keyword">var</span> msgmap     = options.msgmap  || {}
