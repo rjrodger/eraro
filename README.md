@@ -149,7 +149,7 @@ For real-world usage examples, see:
 
 If you're using this module, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
 
-Current Version: 0.1.3
+Current Version: 0.1.4
 
 Tested on: node 0.10.26
 
