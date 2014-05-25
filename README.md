@@ -1,7 +1,7 @@
 eraro
 =====
 
-### Create JavaScript Error objects with code strings, context details, and uncluttered stacktraces
+#### Create JavaScript Error objects with code strings, context details, and templated messages.
 
 There is [annotated source code](http://rjrodger.github.io/eraro/doc/eraro.html) for this module.
 
