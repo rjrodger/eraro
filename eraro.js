@@ -47,7 +47,7 @@ module.exports = eraro
 //   * _package_: String; the package name
 //   * _**package-name**_: Boolean (true); a convenience marker for the package
 //   * _msg_: String; the generated message, may differ from original exception message (if any)
-//   * _details_: Object; contectual details of error
+//   * _details_: Object; contextual details of error
 //   * _callpoint_: String; first line of stacktrace that is external to eraro and calling module 
 function eraro( options ) {
   options = options || {}
