@@ -3,7 +3,7 @@ eraro
 
 ### Create JavaScript Error objects with code strings, context details, and uncluttered stacktraces
 
-There is [annotated source code](http://rjrodger.github.io/use-plugin/doc/use.html) for this module.
+There is [annotated source code](http://rjrodger.github.io/eraro/doc/eraro.html) for this module.
 
 For use in library modules to generate contextual errors with useful
 meta data. Your library module can throw or pass (to a callback) an
@@ -146,4 +146,4 @@ Tested on: node 0.10.26
 
 [![Build Status](https://travis-ci.org/rjrodger/eraro.png?branch=master)](https://travis-ci.org/rjrodger/eraro)
 
-[Annotated Source](http://rjrodger.github.io/use-plugin/doc/use.html)
+[Annotated Source](http://rjrodger.github.io/eraro/doc/eraro.html)
