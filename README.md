@@ -29,10 +29,10 @@ throw error('code_string', 'Message text.', {foo:1, bar:2})
 
 // extend an existing Error object
 var ex = new Error('Another message.')
-throw error(ex,'code_string',{details:'data'})
+throw error(ex,'code_string',{zed:3})
 ```
 
-In all these cases, the Error object will have a _code_ proeprty with value _"code_string"_.
+In all these cases, the Error object will have a _code_ property with value _"code_string"_.
 
 
 # Usage
