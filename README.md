@@ -11,6 +11,8 @@ _Error_ object that has additional properties, such as a _code_, that
 can be used for programmatic inspection by client code that uses your
 library.
 
+See the [use-plugin](http://github.com/rjrodger/use-plugin) module for an example of practical usage.
+
 
 # Quick example
 
