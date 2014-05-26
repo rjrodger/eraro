@@ -37,6 +37,15 @@ throw error(ex,'code_string',{zed:3})
 In all these cases, the Error object will have a _code_ property with value _"code_string"_.
 
 
+# Install
+
+```bash
+npm install eraro
+```
+
+There's an [npm module page for eraro](https://www.npmjs.org/package/eraro).
+
+
 # Usage
 
 Use this module when you are writing a library that will be used by
