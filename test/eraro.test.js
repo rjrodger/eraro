@@ -20,37 +20,44 @@ assert.equal('c1',e1.code)
 assert.equal(1,e1.details.a)
 
 
-var e2 = eraro('c2',{a:2}); delete e2.callpoint;
-assert.equal("{ [Error: foo: c2] code: 'c2', foo: true, package: 'foo', msg: 'foo: c2', details: { a: 2 } }", 
-             util.inspect(e2).replace(/\s+/g,' '))
+function descerr(err) {
+  var out = {message:err.message, code:err.code, package:err.package, msg:err.msg, details:err.details}
+  return util.inspect(out).replace(/\s+/g,' ')
+}
 
 
-var e3 = eraro('c3'); delete e3.callpoint;
-assert.equal("{ [Error: foo: c3] code: 'c3', foo: true, package: 'foo', msg: 'foo: c3', details: {} }",
-             util.inspect(e3).replace(/\s+/g,' '))
+var e2 = eraro('c2',{a:2});
+assert.equal("{ message: 'foo: c2', code: 'c2', package: 'foo', msg: 'foo: c2', details: { a: 2 } }", 
+             descerr(e2))
 
 
-var e4 = eraro(); delete e4.callpoint;
-assert.equal("{ [Error: foo: unknown] code: 'unknown', foo: true, package: 'foo', msg: 'foo: unknown', details: {} }",
-             util.inspect(e4).replace(/\s+/g,' '))
+var e3 = eraro('c3');
+assert.equal("{ message: 'foo: c3', code: 'c3', package: 'foo', msg: 'foo: c3', details: {} }",
+             descerr(e3))
+
+
+var e4 = eraro();
+assert.equal("{ message: 'foo: unknown', code: 'unknown', package: 'foo', msg: 'foo: unknown', details: {} }",
+             descerr(e4))
 
 
 var x0 = new Error('x0')
-var e5 = eraro(x0); delete e5.callpoint;
-assert.equal("{ [Error: x0] code: 'unknown', foo: true, package: 'foo', msg: 'foo: unknown', details: {} }",
-             util.inspect(e5).replace(/\s+/g,' '))
+var e5 = eraro(x0);
+assert.equal("{ message: 'x0', code: 'unknown', package: 'foo', msg: 'foo: unknown', details: {} }",
+             descerr(e5))
 
 
 var x1 = new Error('x1')
-var e6 = eraro(x1,'c4'); delete e6.callpoint;
-assert.equal("{ [Error: x1] code: 'c4', foo: true, package: 'foo', msg: 'foo: c4', details: {} }",
-             util.inspect(e6).replace(/\s+/g,' '))
+var e6 = eraro(x1,'c4');
+assert.equal("{ message: 'x1', code: 'c4', package: 'foo', msg: 'foo: c4', details: {} }",
+             descerr(e6))
 
 
 var x2 = new Error('x2')
-var e7 = eraro(x2,'c5',{a:3}); delete e7.callpoint;
-assert.equal("{ [Error: x2] code: 'c5', foo: true, package: 'foo', msg: 'foo: c5', details: { a: 3 } }",
-             util.inspect(e7).replace(/\s+/g,' '))
+var e7 = eraro(x2,'c5',{a:3});
+assert.equal("{ message: 'x2', code: 'c5', package: 'foo', msg: 'foo: c5', details: { a: 3 } }",
+             descerr(e7))
+
 
 
 var b0 = eraro('b0','<%=foo(1)%>')
