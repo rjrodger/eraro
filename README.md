@@ -162,7 +162,7 @@ If you're using this module, feel free to contact me on twitter if you have any 
 
 Current Version: 0.1.6
 
-Tested on: node 0.10.28
+Tested on: node 0.10.28, 0.11.13
 
 [![Build Status](https://travis-ci.org/rjrodger/eraro.png?branch=master)](https://travis-ci.org/rjrodger/eraro)
 
