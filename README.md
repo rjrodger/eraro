@@ -160,9 +160,9 @@ For real-world usage examples, see:
 
 If you're using this module, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
 
-Current Version: 0.1.5
+Current Version: 0.1.6
 
-Tested on: node 0.10.26
+Tested on: node 0.10.28
 
 [![Build Status](https://travis-ci.org/rjrodger/eraro.png?branch=master)](https://travis-ci.org/rjrodger/eraro)
 

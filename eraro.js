@@ -131,7 +131,7 @@ function callpoint( error, markers ) {
       if( !found ) break line_loop;
     }
 
-    out = lines[i].substring(4)
+    out = _.isString(lines[i]) ? lines[i].substring(4) : out
   }
 
   return out
