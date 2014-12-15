@@ -177,7 +177,8 @@ function buildmessage(msg,msgmap,msgprefix,inspect,code,details) {
   var done = false
   while( !done ) {
     try {
-      message = _.template( message, valstrmap )
+      var tm = _.template( message )
+      message = tm(valstrmap)
       done = true
     }
     catch(e) {
