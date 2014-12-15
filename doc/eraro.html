@@ -91,7 +91,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>module.exports = eraro</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.exports = eraro</pre></div></div>
             
         </li>
         
@@ -107,9 +107,10 @@
 <ul>
 <li><em>options</em> : (optional) Object; properties:<ul>
 <li><em>package</em> : (optional) String; package name to mark Error objects</li>
-<li><em>prefix</em> : (optional) Boolean/String; If false, then no prefix is used; If not defined, the package name is used.</li>
-<li><em>module</em> : (optional) Object; <em>module</em> object to use as starting point for <em>require</em> calls</li>
-<li><em>msgmap</em> : (optional) Object; map codes to message templates </li>
+<li><em>prefix</em>  : (optional) Boolean/String; If false, then no prefix is used; If not defined, the package name is used</li>
+<li><em>module</em>  : (optional) Object; <em>module</em> object to use as starting point for <em>require</em> calls</li>
+<li><em>msgmap</em>  : (optional) Object; map codes to message templates </li>
+<li><em>inspect</em> : (optional) Boolean; If true, <em>util.inspect</em> is called on values; default: true.</li>
 </ul>
 </li>
 </ul>
@@ -134,23 +135,24 @@ The returned Error object has the following additional properties:</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">eraro</span><span class="hljs-params">( options )</span> {</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">eraro</span><span class="hljs-params">( options )</span> </span>{
   options = options || {}
 
   <span class="hljs-keyword">var</span> msgprefix  = <span class="hljs-literal">false</span> === options.prefix ? <span class="hljs-string">''</span> : 
         (_.isString(options.prefix) ? options.prefix : _.isString(options.package) ? options.package+<span class="hljs-string">': '</span> : <span class="hljs-string">''</span>)
 
   <span class="hljs-keyword">var</span> packaje    = options.package || <span class="hljs-string">'unknown'</span>
-  <span class="hljs-keyword">var</span> callmodule = options.module  || module
+  <span class="hljs-keyword">var</span> callmodule = options.module  || <span class="hljs-built_in">module</span>
   <span class="hljs-keyword">var</span> msgmap     = options.msgmap  || {}
+  <span class="hljs-keyword">var</span> inspect    = <span class="hljs-literal">null</span> == options.inspect ? <span class="hljs-literal">true</span> : !!options.inspect
 
-  <span class="hljs-keyword">var</span> markers    = [module.filename]
+  <span class="hljs-keyword">var</span> markers    = [<span class="hljs-built_in">module</span>.filename]
 
   <span class="hljs-keyword">var</span> filename = callmodule.filename
   <span class="hljs-keyword">if</span>( filename ) markers.push(filename);
 
 
-  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( ex, code, msg, details )</span> {</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( ex, code, msg, details )</span> </span>{
     <span class="hljs-keyword">var</span> internalex = <span class="hljs-literal">false</span>
 
     <span class="hljs-keyword">if</span>( !util.isError(ex) ) {
@@ -163,7 +165,7 @@ The returned Error object has the following additional properties:</p>
 
     code    = _.isString(code) ? code : <span class="hljs-string">'unknown'</span>
     details = _.isObject(details) ? details : (_.isObject(msg) &amp;&amp; !_.isString(msg) ? msg : {})
-    msg     = buildmessage(msg,msgmap,msgprefix,code,details)
+    msg     = buildmessage(msg,msgmap,msgprefix,inspect,code,details)
 
     <span class="hljs-keyword">if</span>( !ex ) {
       ex = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(msg)
@@ -199,7 +201,7 @@ The returned Error object has the following additional properties:</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callpoint</span><span class="hljs-params">( error, markers )</span> {</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callpoint</span><span class="hljs-params">( error, markers )</span> </span>{
   markers = _.isArray(markers) ? markers : []
 
   <span class="hljs-keyword">var</span> stack = error ? error.stack : <span class="hljs-literal">null</span>
@@ -225,7 +227,7 @@ The returned Error object has the following additional properties:</p>
       <span class="hljs-keyword">if</span>( !found ) <span class="hljs-keyword">break</span> line_loop;
     }
 
-    out = lines[i].substring(<span class="hljs-number">4</span>)
+    out = _.isString(lines[i]) ? lines[i].substring(<span class="hljs-number">4</span>) : out
   }
 
   <span class="hljs-keyword">return</span> out
@@ -258,7 +260,7 @@ As a convenience, <em>util</em> and <em>_</em> are made available in the templat
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildmessage</span><span class="hljs-params">(msg,msgmap,msgprefix,code,details)</span> {</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildmessage</span><span class="hljs-params">(msg,msgmap,msgprefix,inspect,code,details)</span> </span>{
   <span class="hljs-keyword">var</span> message = msgprefix + (_.isString(msg) ? msg : _.isString(msgmap[code]) ? msgmap[code] : code )</pre></div></div>
             
         </li>
@@ -292,17 +294,18 @@ Reserved words and undefined need to be suffixed with $ in the template interpol
             
             <div class="content"><div class='highlight'><pre>
   <span class="hljs-keyword">var</span> valstrmap = {util:util,_:_}
-  _.each(valmap,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(val,key)</span>{</span>
+  _.each(valmap,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(val,key)</span></span>{
     <span class="hljs-comment">/* jshint evil:true */</span>
     <span class="hljs-keyword">try</span> { <span class="hljs-built_in">eval</span>(<span class="hljs-string">'var '</span>+key+<span class="hljs-string">';'</span>) } <span class="hljs-keyword">catch</span>(e) { key = key+<span class="hljs-string">'$'</span> }
     <span class="hljs-keyword">if</span>( {<span class="hljs-string">'undefined'</span>:<span class="hljs-number">1</span>,<span class="hljs-string">'NaN'</span>:<span class="hljs-number">1</span>}[key] ) { key = key+<span class="hljs-string">'$'</span> }
-    valstrmap[key] = val
+    valstrmap[key] = inspect &amp;&amp; !_.isString(val) ? util.inspect(val) : val
   })
 
   <span class="hljs-keyword">var</span> done = <span class="hljs-literal">false</span>
   <span class="hljs-keyword">while</span>( !done ) {
     <span class="hljs-keyword">try</span> {
-      message = _.template( message, valstrmap )
+      <span class="hljs-keyword">var</span> tm = _.template( message )
+      message = tm(valstrmap)
       done = <span class="hljs-literal">true</span>
     }
     <span class="hljs-keyword">catch</span>(e) {
