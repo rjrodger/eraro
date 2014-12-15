@@ -64,15 +64,16 @@ var b0 = eraro('b0','<%=foo(1)%>')
 assert.equal("foo: <%=foo(1)%> VALUES:{ code: \'b0\' } TEMPLATE ERROR: TypeError: string is not a function",b0.message)
 
 
-var d0 = eraro('d0','<%=a.b%>', {a:{b:99}})
-assert.equal("foo: 99",d0.message)
-assert.ok(d0.callpoint.indexOf("eraro/test/eraro.test.js:"))
-
-
-
 var bar0 = require('..')({package:'bar',prefix:'BAR-'})
 assert.equal('BAR-code0',bar0('code0').message)
 
 
 var bar1 = require('..')({package:'bar',prefix:false})
 assert.equal('code1',bar1('code1').message)
+
+
+var e8 = eraro('i0','<%=a%>', {a:{b:99}})
+assert.equal('foo: { b: 99 }',e8.message)
+
+
+

@@ -28,9 +28,10 @@ module.exports = eraro
 // 
 //   * _options_ : (optional) Object; properties:
 //      * _package_ : (optional) String; package name to mark Error objects
-//      * _prefix_ : (optional) Boolean/String; If false, then no prefix is used; If not defined, the package name is used
-//      * _module_ : (optional) Object; _module_ object to use as starting point for _require_ calls
-//      * _msgmap_ : (optional) Object; map codes to message templates 
+//      * _prefix_  : (optional) Boolean/String; If false, then no prefix is used; If not defined, the package name is used
+//      * _module_  : (optional) Object; _module_ object to use as starting point for _require_ calls
+//      * _msgmap_  : (optional) Object; map codes to message templates 
+//      * _inspect_ : (optional) Boolean; If true, _util.inspect_ is called on values; default: true.
 //
 // Returns: Function
 //
@@ -59,6 +60,7 @@ function eraro( options ) {
   var packaje    = options.package || 'unknown'
   var callmodule = options.module  || module
   var msgmap     = options.msgmap  || {}
+  var inspect    = null == options.inspect ? true : !!options.inspect
 
   var markers    = [module.filename]
 
@@ -79,7 +81,7 @@ function eraro( options ) {
 
     code    = _.isString(code) ? code : 'unknown'
     details = _.isObject(details) ? details : (_.isObject(msg) && !_.isString(msg) ? msg : {})
-    msg     = buildmessage(msg,msgmap,msgprefix,code,details)
+    msg     = buildmessage(msg,msgmap,msgprefix,inspect,code,details)
 
     if( !ex ) {
       ex = new Error(msg)
@@ -155,7 +157,7 @@ function callpoint( error, markers ) {
 //   * _details_: (required) Object; error details providing context
 //
 // Returns: String; human readable error message
-function buildmessage(msg,msgmap,msgprefix,code,details) {
+function buildmessage(msg,msgmap,msgprefix,inspect,code,details) {
   var message = msgprefix + (_.isString(msg) ? msg : _.isString(msgmap[code]) ? msgmap[code] : code )
 
   // These are the inserts.
@@ -169,7 +171,7 @@ function buildmessage(msg,msgmap,msgprefix,code,details) {
     /* jshint evil:true */
     try { eval('var '+key+';') } catch(e) { key = key+'$' }
     if( {'undefined':1,'NaN':1}[key] ) { key = key+'$' }
-    valstrmap[key] = val
+    valstrmap[key] = inspect && !_.isString(val) ? util.inspect(val) : val
   })
 
   var done = false

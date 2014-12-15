@@ -71,7 +71,7 @@ function doStuff( input, callback ) {
 ```
 
 The _package_ option is normally the name of your library. That is, the value
-the _name_ property in _package.json_. The generated Error object will
+of the _name_ property in _package.json_. The generated Error object will
 have two properties to define the package: _package_, a string that is
 the name of the package, and also a boolean, the name of the package itself.
 This lets you check for the type of error easily:
@@ -148,6 +148,16 @@ will be added to it, but the original message will be used as the
 message template, overriding any matching code message.
 
 
+# Options
+
+When creating an _error_ function, you can use the following options:
+
+   * _package_ : (optional) String; package name to mark Error objects
+   * _prefix_  : (optional) Boolean/String; If false, then no prefix is used; If not defined, the package name is used
+   * _module_  : (optional) Object; _module_ object to use as starting point for _require_ calls
+   * _msgmap_  : (optional) Object; map codes to message templates 
+   * _inspect_ : (optional) Boolean; If true, _util.inspect_ is called on values; default: true.
+
 
 # In the Wild
 
@@ -160,9 +170,9 @@ For real-world usage examples, see:
 
 If you're using this module, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
 
-Current Version: 0.1.6
+Current Version: 0.2.0
 
-Tested on: node 0.10.28, 0.11.13
+Tested on: node 0.10.31
 
 [![Build Status](https://travis-ci.org/rjrodger/eraro.png?branch=master)](https://travis-ci.org/rjrodger/eraro)
 
