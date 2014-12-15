@@ -177,3 +177,4 @@ Tested on: node 0.10.31
 [![Build Status](https://travis-ci.org/rjrodger/eraro.png?branch=master)](https://travis-ci.org/rjrodger/eraro)
 
 [Annotated Source](http://rjrodger.github.io/eraro/doc/eraro.html)
+
