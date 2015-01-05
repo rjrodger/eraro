@@ -1,6 +1,6 @@
 {
   "name": "eraro",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Create JavaScript Error objects with code strings, context details, and templated messages.",
   "main": "eraro.js",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/rjrodger/eraro",
   "dependencies": {
-    "underscore": "~1.7.0"
+    "lodash": "~2.4.1"
   },
   "devDependencies": {
     "mocha": "~1.20.1",

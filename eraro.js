@@ -14,12 +14,13 @@ var util = require('util')
 
 
 // #### External modules
-var _ = require('underscore')
+var _ = require('lodash')
 
 
 
 // #### Exports
 module.exports = eraro
+
 
 
 
@@ -68,7 +69,7 @@ function eraro( options ) {
   if( filename ) markers.push(filename);
 
 
-  return function( ex, code, msg, details ) {
+  var errormaker = function( ex, code, msg, details ) {
     var internalex = false
 
     if( !util.isError(ex) ) {
@@ -96,6 +97,10 @@ function eraro( options ) {
 
     return ex;
   }
+
+  errormaker.callpoint = callpoint
+
+  return errormaker;
 }
 
 
