@@ -41,21 +41,27 @@ assert.equal("{ message: 'foo: unknown', code: 'unknown', package: 'foo', msg: '
              descerr(e4))
 
 
+var e41 = eraro(eraro('c4'));
+assert.equal("{ message: 'foo: c4', code: 'c4', package: 'foo', msg: 'foo: c4', details: {} }",
+             descerr(e41))
+
+
 var x0 = new Error('x0')
 var e5 = eraro(x0);
-assert.equal("{ message: 'x0', code: 'unknown', package: 'foo', msg: 'foo: unknown', details: {} }",
+assert.equal("{ message: 'foo: x0', code: 'x0', package: 'foo', msg: 'foo: x0', details: {} }",
              descerr(e5))
 
 
 var x1 = new Error('x1')
 var e6 = eraro(x1,'c4');
-assert.equal("{ message: 'x1', code: 'c4', package: 'foo', msg: 'foo: c4', details: {} }",
+assert.equal("{ message: 'foo: c4', code: 'c4', package: 'foo', msg: 'foo: c4', details: {} }",
              descerr(e6))
+assert.equal(e6.orig,'Error: x1')
 
 
 var x2 = new Error('x2')
 var e7 = eraro(x2,'c5',{a:3});
-assert.equal("{ message: 'x2', code: 'c5', package: 'foo', msg: 'foo: c5', details: { a: 3 } }",
+assert.equal("{ message: 'foo: c5', code: 'c5', package: 'foo', msg: 'foo: c5', details: { a: 3 } }",
              descerr(e7))
 
 

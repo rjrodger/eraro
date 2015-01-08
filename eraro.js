@@ -72,7 +72,10 @@ function eraro( options ) {
   var errormaker = function( ex, code, msg, details ) {
     var internalex = false
 
-    if( !util.isError(ex) ) {
+    if( util.isError(ex) ) {
+      if( ex.eraro ) return ex;
+    }
+    else {
       internalex = true
       ex         = null
       code       = arguments[0]
@@ -80,22 +83,36 @@ function eraro( options ) {
       details    = arguments[2]
     }
 
-    code    = _.isString(code) ? code : 'unknown'
-    details = _.isObject(details) ? details : (_.isObject(msg) && !_.isString(msg) ? msg : {})
-    msg     = buildmessage(msg,msgmap,msgprefix,inspect,code,details)
+    code    = _.isString(code) ? code : 
+      (ex ? 
+       ex.code ? ex.code : 
+       ex.message ? ex.message : 
+       'unknown' : 'unknown')
 
-    if( !ex ) {
-      ex = new Error(msg)
-    }
+    details = _.isObject(details) ? details : 
+      (_.isObject(msg) && !_.isString(msg) ? msg : {})
 
-    ex.code      = code
-    ex[packaje]  = true
-    ex.package   = packaje
-    ex.msg       = msg
-    ex.details   = details
-    ex.callpoint = callpoint( ex, markers )
+    msg     = _.isString(msg)     ? msg :     null
+    msg = buildmessage(msg,msgmap,msgprefix,inspect,code,details)
 
-    return ex;
+
+    var orig = ex ? ex.toString() : ''
+
+    var err = new Error(msg)
+
+    err.eraro     = true
+
+    err.orig      = orig
+    err.code      = code
+    err[packaje]  = true
+    err.package   = packaje
+    err.msg       = msg
+    err.details   = details
+
+    err.stack     = ex ? ex.stack : err.stack
+    err.callpoint = callpoint( err , markers )
+
+    return err;
   }
 
   errormaker.callpoint = callpoint
