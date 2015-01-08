@@ -92,17 +92,25 @@ function eraro( options ) {
     details = _.isObject(details) ? details : 
       (_.isObject(msg) && !_.isString(msg) ? msg : {})
 
-    msg     = _.isString(msg)     ? msg :     null
-    msg = buildmessage(msg,msgmap,msgprefix,inspect,code,details)
+    msg = _.isString(msg) ? msg : null
+    msg = buildmessage(msg,msgmap,msgprefix,inspect,code,details,ex)
 
-
-    var orig = ex ? ex.toString() : ''
 
     var err = new Error(msg)
+    
+    if( ex ) { 
+      details.orig$    = null == details.orig$ ? ex : details.orig$
+      details.message$ = null == details.message$ ? ex.message : details.message$
+
+      // drag along properties from original exception
+      for( var p in ex ) {
+        err[p] = ex[p]
+      }
+    }
 
     err.eraro     = true
 
-    err.orig      = orig
+    err.orig      = ex // orig
     err.code      = code
     err[packaje]  = true
     err.package   = packaje
@@ -179,8 +187,10 @@ function callpoint( error, markers ) {
 //   * _details_: (required) Object; error details providing context
 //
 // Returns: String; human readable error message
-function buildmessage(msg,msgmap,msgprefix,inspect,code,details) {
-  var message = msgprefix + (_.isString(msg) ? msg : _.isString(msgmap[code]) ? msgmap[code] : code )
+function buildmessage(msg,msgmap,msgprefix,inspect,code,details,ex) {
+  var message = msgprefix + (_.isString(msg) ? msg : 
+                             _.isString(msgmap[code]) ? msgmap[code] : 
+                             (ex ? ex.message : code) )
 
   // These are the inserts.
   var valmap = _.extend({},details,{code:code})
