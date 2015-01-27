@@ -21,6 +21,13 @@ See the [use-plugin](http://github.com/rjrodger/use-plugin) module for
 an example of practical usage.
 
 
+# Support
+
+If you're using this module, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
+
+[![Gitter chat](https://badges.gitter.im/rjrodger/eraro.png)](https://gitter.im/rjrodger/eraro)
+
+
 # Quick example
 
 ```JavaScript
@@ -172,9 +179,7 @@ When creating an _error_ function, you can use the following options:
 For real-world usage examples, see:
 
   * _[use-plugin](http://github.com/rjrodger/use-plugin)_: a utility for providing a plugin interface for extensions to your module
+  * _[seneca](http://github.com/rjrodger/seneca)_: a micro-services framework for Node.js
 
 
-# Support
-
-If you're using this module, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
 
