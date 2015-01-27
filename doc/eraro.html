@@ -157,7 +157,7 @@ The returned Error object has the following additional properties:</p>
     <span class="hljs-keyword">var</span> internalex = <span class="hljs-literal">false</span>
 
     <span class="hljs-keyword">if</span>( util.isError(ex) ) {
-      <span class="hljs-keyword">if</span>( ex.eraro ) <span class="hljs-keyword">return</span> ex;
+      <span class="hljs-keyword">if</span>( ex.eraro &amp;&amp; !options.override ) <span class="hljs-keyword">return</span> ex;
     }
     <span class="hljs-keyword">else</span> {
       internalex = <span class="hljs-literal">true</span>
@@ -167,7 +167,7 @@ The returned Error object has the following additional properties:</p>
       details    = <span class="hljs-built_in">arguments</span>[<span class="hljs-number">2</span>]
     }
 
-    code    = _.isString(code) ? code : 
+    code = _.isString(code) ? code : 
       (ex ? 
        ex.code ? ex.code : 
        ex.message ? ex.message : 
@@ -177,7 +177,7 @@ The returned Error object has the following additional properties:</p>
       (_.isObject(msg) &amp;&amp; !_.isString(msg) ? msg : {})
 
     msg = _.isString(msg) ? msg : <span class="hljs-literal">null</span>
-    msg = buildmessage(msg,msgmap,msgprefix,inspect,code,details,ex)
+    msg = buildmessage(options,msg,msgmap,msgprefix,inspect,code,details,ex)
 
 
     <span class="hljs-keyword">var</span> err = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(msg)
@@ -302,10 +302,10 @@ As a convenience, <em>util</em> and <em>_</em> are made available in the templat
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildmessage</span><span class="hljs-params">(msg,msgmap,msgprefix,inspect,code,details,ex)</span> </span>{
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildmessage</span><span class="hljs-params">(options,msg,msgmap,msgprefix,inspect,code,details,ex)</span> </span>{
   <span class="hljs-keyword">var</span> message = msgprefix + (_.isString(msg) ? msg : 
                              _.isString(msgmap[code]) ? msgmap[code] : 
-                             (ex ? ex.message : code) )</pre></div></div>
+                             ex ? originalmsg(options.override,ex) : code )</pre></div></div>
             
         </li>
         
@@ -331,8 +331,9 @@ As a convenience, <em>util</em> and <em>_</em> are made available in the templat
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>Workaround to prevent underscore blowing up if properties are not found.
-Reserved words and undefined need to be suffixed with $ in the template interpolates.</p>
+              <p>Workaround to prevent underscore blowing up if properties are not
+found.  Reserved words and undefined need to be suffixed with $
+in the template interpolates.</p>
 
             </div>
             
@@ -370,18 +371,30 @@ Reserved words and undefined need to be suffixed with $ in the template interpol
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Some other error - give up and just dump the properties at the end of the template.</p>
+              <p>Some other error - give up and just dump the properties at
+the end of the template.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">else</span> {
         done = <span class="hljs-literal">true</span>
-        message = message+<span class="hljs-string">' VALUES:'</span>+util.inspect(valmap,{depth:<span class="hljs-number">2</span>})+<span class="hljs-string">' TEMPLATE ERROR: '</span>+e
+        message = message+<span class="hljs-string">' VALUES:'</span>+util.inspect(valmap,{depth:<span class="hljs-number">2</span>})+
+          <span class="hljs-string">' TEMPLATE ERROR: '</span>+e
       }
     }
   }
 
   <span class="hljs-keyword">return</span> message
+}
+
+
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">originalmsg</span><span class="hljs-params">( override, ex )</span> </span>{
+  <span class="hljs-keyword">if</span>( !ex ) <span class="hljs-keyword">return</span>;
+
+  <span class="hljs-keyword">if</span>( override &amp;&amp; ex.eraro &amp;&amp; ex.orig ) <span class="hljs-keyword">return</span> ex.orig.message;
+
+  <span class="hljs-keyword">return</span> ex.message;
 }</pre></div></div>
             
         </li>
