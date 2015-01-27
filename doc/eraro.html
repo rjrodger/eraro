@@ -30,7 +30,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/* Copyright (c) 2014 Richard Rodger, MIT License */</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/* Copyright (c) 2014-2015 Richard Rodger, MIT License */</span>
 <span class="hljs-comment">/* jshint node:true, asi:true, eqnull:true */</span></pre></div></div>
             
         </li>
@@ -42,7 +42,8 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Create JavaScript Error objects with code strings, context details, and templated messages.</p>
+              <p>Create JavaScript Error objects with code strings, context details,
+and templated messages.</p>
 
             </div>
             
@@ -76,7 +77,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'underscore'</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> _ = <span class="hljs-built_in">require</span>(<span class="hljs-string">'lodash'</span>)</pre></div></div>
             
         </li>
         
@@ -152,10 +153,13 @@ The returned Error object has the following additional properties:</p>
   <span class="hljs-keyword">if</span>( filename ) markers.push(filename);
 
 
-  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( ex, code, msg, details )</span> </span>{
+  <span class="hljs-keyword">var</span> errormaker = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( ex, code, msg, details )</span> </span>{
     <span class="hljs-keyword">var</span> internalex = <span class="hljs-literal">false</span>
 
-    <span class="hljs-keyword">if</span>( !util.isError(ex) ) {
+    <span class="hljs-keyword">if</span>( util.isError(ex) ) {
+      <span class="hljs-keyword">if</span>( ex.eraro ) <span class="hljs-keyword">return</span> ex;
+    }
+    <span class="hljs-keyword">else</span> {
       internalex = <span class="hljs-literal">true</span>
       ex         = <span class="hljs-literal">null</span>
       code       = <span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]
@@ -163,24 +167,24 @@ The returned Error object has the following additional properties:</p>
       details    = <span class="hljs-built_in">arguments</span>[<span class="hljs-number">2</span>]
     }
 
-    code    = _.isString(code) ? code : <span class="hljs-string">'unknown'</span>
-    details = _.isObject(details) ? details : (_.isObject(msg) &amp;&amp; !_.isString(msg) ? msg : {})
-    msg     = buildmessage(msg,msgmap,msgprefix,inspect,code,details)
+    code    = _.isString(code) ? code : 
+      (ex ? 
+       ex.code ? ex.code : 
+       ex.message ? ex.message : 
+       <span class="hljs-string">'unknown'</span> : <span class="hljs-string">'unknown'</span>)
 
-    <span class="hljs-keyword">if</span>( !ex ) {
-      ex = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(msg)
-    }
+    details = _.isObject(details) ? details : 
+      (_.isObject(msg) &amp;&amp; !_.isString(msg) ? msg : {})
 
-    ex.code      = code
-    ex[packaje]  = <span class="hljs-literal">true</span>
-    ex.package   = packaje
-    ex.msg       = msg
-    ex.details   = details
-    ex.callpoint = callpoint( ex, markers )
+    msg = _.isString(msg) ? msg : <span class="hljs-literal">null</span>
+    msg = buildmessage(msg,msgmap,msgprefix,inspect,code,details,ex)
 
-    <span class="hljs-keyword">return</span> ex;
-  }
-}</pre></div></div>
+
+    <span class="hljs-keyword">var</span> err = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(msg)
+    
+    <span class="hljs-keyword">if</span>( ex ) { 
+      details.orig$    = <span class="hljs-literal">null</span> == details.orig$ ? ex : details.orig$
+      details.message$ = <span class="hljs-literal">null</span> == details.message$ ? ex.message : details.message$</pre></div></div>
             
         </li>
         
@@ -190,6 +194,44 @@ The returned Error object has the following additional properties:</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>drag along properties from original exception</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">for</span>( <span class="hljs-keyword">var</span> p <span class="hljs-keyword">in</span> ex ) {
+        err[p] = ex[p]
+      }
+    }
+
+    err.eraro     = <span class="hljs-literal">true</span>
+
+    err.orig      = ex <span class="hljs-comment">// orig</span>
+    err.code      = code
+    err[packaje]  = <span class="hljs-literal">true</span>
+    err.package   = packaje
+    err.msg       = msg
+    err.details   = details
+
+    err.stack     = ex ? ex.stack : err.stack
+    err.callpoint = callpoint( err , markers )
+
+    <span class="hljs-keyword">return</span> err;
+  }
+
+  errormaker.callpoint = callpoint
+
+  <span class="hljs-keyword">return</span> errormaker;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <h4 id="find-the-first-external-stack-trace-line-">Find the first external stack trace line.</h4>
 <p>Parameters:</p>
@@ -236,11 +278,11 @@ The returned Error object has the following additional properties:</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <h4 id="build-the-message-string-from-a-template-by-inserting-details">Build the message string from a template by inserting details</h4>
 <p>Uses the underscore template function with default settings. 
@@ -260,17 +302,19 @@ As a convenience, <em>util</em> and <em>_</em> are made available in the templat
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildmessage</span><span class="hljs-params">(msg,msgmap,msgprefix,inspect,code,details)</span> </span>{
-  <span class="hljs-keyword">var</span> message = msgprefix + (_.isString(msg) ? msg : _.isString(msgmap[code]) ? msgmap[code] : code )</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildmessage</span><span class="hljs-params">(msg,msgmap,msgprefix,inspect,code,details,ex)</span> </span>{
+  <span class="hljs-keyword">var</span> message = msgprefix + (_.isString(msg) ? msg : 
+                             _.isString(msgmap[code]) ? msgmap[code] : 
+                             (ex ? ex.message : code) )</pre></div></div>
             
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>These are the inserts.</p>
 
@@ -281,11 +325,11 @@ As a convenience, <em>util</em> and <em>_</em> are made available in the templat
         </li>
         
         
-        <li id="section-10">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Workaround to prevent underscore blowing up if properties are not found.
 Reserved words and undefined need to be suffixed with $ in the template interpolates.</p>
@@ -320,11 +364,11 @@ Reserved words and undefined need to be suffixed with $ in the template interpol
         </li>
         
         
-        <li id="section-11">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>Some other error - give up and just dump the properties at the end of the template.</p>
 
