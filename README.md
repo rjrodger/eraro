@@ -2,7 +2,7 @@ eraro
 =====
 
 #### Create JavaScript Error objects with code strings, context
-     details, and templated messages.
+#### details, and templated messages.
 
 Current Version: 0.4.0
 
