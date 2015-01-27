@@ -4,10 +4,8 @@
   "description": "Create JavaScript Error objects with code strings, context details, and templated messages.",
   "main": "eraro.js",
   "scripts": {
-    "test": "node test/eraro.test.js",
-    "jshint": "./node_modules/.bin/jshint eraro.js",
-    "docco": "./node_modules/.bin/docco eraro.js -o doc",
-    "gh-pages-doc": "cp -r doc/* ../gh-pages/eraro/doc"
+    "test": "./test.sh",
+    "build": "./build.sh"
   },
   "repository": {
     "type": "git",
@@ -15,7 +13,8 @@
   },
   "keywords": [
     "eraro",
-    "error"
+    "error",
+    "exception"
   ],
   "author": "Richard Rodger (http://richardrodger.com)",
   "license": "MIT",
@@ -25,11 +24,6 @@
   "homepage": "https://github.com/rjrodger/eraro",
   "dependencies": {
     "lodash": "~2.4.1"
-  },
-  "devDependencies": {
-    "mocha": "~1.20.1",
-    "docco": "~0.6.3",
-    "jshint": "~2.5.10"
   },
   "files": [
     "README.md",

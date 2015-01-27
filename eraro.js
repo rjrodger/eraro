@@ -1,27 +1,22 @@
-/* Copyright (c) 2014 Richard Rodger, MIT License */
+/* Copyright (c) 2014-2015 Richard Rodger, MIT License */
 /* jshint node:true, asi:true, eqnull:true */
 
 
-
-// Create JavaScript Error objects with code strings, context details, and templated messages.
+// Create JavaScript Error objects with code strings, context details,
+// and templated messages.
 "use strict";
-
 
 
 // #### System modules
 var util = require('util')
 
 
-
 // #### External modules
 var _ = require('lodash')
 
 
-
 // #### Exports
 module.exports = eraro
-
-
 
 
 // #### Create an _eraro_ function

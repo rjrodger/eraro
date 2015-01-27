@@ -1,9 +1,16 @@
 eraro
 =====
 
-#### Create JavaScript Error objects with code strings, context details, and templated messages.
+#### Create JavaScript Error objects with code strings, context
+     details, and templated messages.
 
-There is [annotated source code](http://rjrodger.github.io/eraro/doc/eraro.html) for this module.
+Current Version: 0.4.0
+
+Tested on: node 0.10.35
+
+[![Build Status](https://travis-ci.org/rjrodger/eraro.png?branch=master)](https://travis-ci.org/rjrodger/eraro)
+
+[Annotated Source](http://rjrodger.github.io/eraro/doc/eraro.html)
 
 For use in library modules to generate contextual errors with useful
 meta data. Your library module can throw or pass (to a callback) an
@@ -11,7 +18,8 @@ _Error_ object that has additional properties, such as a _code_, that
 can be used for programmatic inspection by client code that uses your
 library.
 
-See the [use-plugin](http://github.com/rjrodger/use-plugin) module for an example of practical usage.
+See the [use-plugin](http://github.com/rjrodger/use-plugin) module for
+an example of practical usage.
 
 
 # Quick example
@@ -34,7 +42,8 @@ var ex = new Error('Another message.')
 throw error(ex,'code_string',{zed:3})
 ```
 
-In all these cases, the Error object will have a _code_ property with value _"code_string"_.
+In all these cases, the Error object will have a _code_ property with
+value _"code_string"_.
 
 
 # Install
@@ -169,12 +178,4 @@ For real-world usage examples, see:
 # Support
 
 If you're using this module, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
-
-Current Version: 0.4.0
-
-Tested on: node 0.10.35
-
-[![Build Status](https://travis-ci.org/rjrodger/eraro.png?branch=master)](https://travis-ci.org/rjrodger/eraro)
-
-[Annotated Source](http://rjrodger.github.io/eraro/doc/eraro.html)
 
