@@ -3,7 +3,7 @@ eraro
 
 #### Create JavaScript Error objects with code strings, context details, and templated messages.
 
-Current Version: 0.4.0
+Current Version: 0.4.1
 
 Tested on: node 0.10.35
 

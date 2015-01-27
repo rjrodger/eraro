@@ -68,7 +68,7 @@ function eraro( options ) {
     var internalex = false
 
     if( util.isError(ex) ) {
-      if( ex.eraro ) return ex;
+      if( ex.eraro && !options.override ) return ex;
     }
     else {
       internalex = true
@@ -78,7 +78,7 @@ function eraro( options ) {
       details    = arguments[2]
     }
 
-    code    = _.isString(code) ? code : 
+    code = _.isString(code) ? code : 
       (ex ? 
        ex.code ? ex.code : 
        ex.message ? ex.message : 
@@ -88,7 +88,7 @@ function eraro( options ) {
       (_.isObject(msg) && !_.isString(msg) ? msg : {})
 
     msg = _.isString(msg) ? msg : null
-    msg = buildmessage(msg,msgmap,msgprefix,inspect,code,details,ex)
+    msg = buildmessage(options,msg,msgmap,msgprefix,inspect,code,details,ex)
 
 
     var err = new Error(msg)
@@ -182,16 +182,17 @@ function callpoint( error, markers ) {
 //   * _details_: (required) Object; error details providing context
 //
 // Returns: String; human readable error message
-function buildmessage(msg,msgmap,msgprefix,inspect,code,details,ex) {
+function buildmessage(options,msg,msgmap,msgprefix,inspect,code,details,ex) {
   var message = msgprefix + (_.isString(msg) ? msg : 
                              _.isString(msgmap[code]) ? msgmap[code] : 
-                             (ex ? ex.message : code) )
+                             ex ? originalmsg(options.override,ex) : code )
 
   // These are the inserts.
   var valmap = _.extend({},details,{code:code})
 
-  // Workaround to prevent underscore blowing up if properties are not found.
-  // Reserved words and undefined need to be suffixed with $ in the template interpolates.
+  // Workaround to prevent underscore blowing up if properties are not
+  // found.  Reserved words and undefined need to be suffixed with $
+  // in the template interpolates.
 
   var valstrmap = {util:util,_:_}
   _.each(valmap,function(val,key){
@@ -217,10 +218,12 @@ function buildmessage(msg,msgmap,msgprefix,inspect,code,details,ex) {
         else done = true
       }
 
-      // Some other error - give up and just dump the properties at the end of the template.
+      // Some other error - give up and just dump the properties at
+      // the end of the template.
       else {
         done = true
-        message = message+' VALUES:'+util.inspect(valmap,{depth:2})+' TEMPLATE ERROR: '+e
+        message = message+' VALUES:'+util.inspect(valmap,{depth:2})+
+          ' TEMPLATE ERROR: '+e
       }
     }
   }
@@ -228,3 +231,12 @@ function buildmessage(msg,msgmap,msgprefix,inspect,code,details,ex) {
   return message
 }
 
+
+
+function originalmsg( override, ex ) {
+  if( !ex ) return;
+
+  if( override && ex.eraro && ex.orig ) return ex.orig.message;
+
+  return ex.message;
+}
