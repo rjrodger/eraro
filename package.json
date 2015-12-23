@@ -5,6 +5,7 @@
   "main": "eraro.js",
   "scripts": {
     "test": "lab test/*.test.js",
+    "lab -s test/*.spec.js -r lcov | coveralls",
     "build": "./build.sh"
   },
   "repository": {
@@ -32,6 +33,7 @@
   ],
   "devDependencies": {
     "code": "^1.5.0",
+    "coveralls": "^2.11.6",
     "lab": "^6.2.0"
   }
 }
