@@ -1,15 +1,13 @@
 eraro
 =====
 
+[![npm version][npm-badge]][npm-url]
+[![Build Status][travis-badge]][travis-url]
+[![Coverage Status][coveralls-badge]][coveralls-url]
+[![Dependency Status][david-badge]][david-url]
+[![Gitter chat][gitter-badge]][gitter-url]
+
 #### Create JavaScript Error objects with code strings, context details, and templated messages.
-
-Current Version: 0.4.1
-
-Tested on: node 0.10.35
-
-[![Build Status](https://travis-ci.org/rjrodger/eraro.png?branch=master)](https://travis-ci.org/rjrodger/eraro)
-
-[Annotated Source](http://rjrodger.github.io/eraro/doc/eraro.html)
 
 For use in library modules to generate contextual errors with useful
 meta data. Your library module can throw or pass (to a callback) an
@@ -17,15 +15,7 @@ _Error_ object that has additional properties, such as a _code_, that
 can be used for programmatic inspection by client code that uses your
 library.
 
-See the [use-plugin](http://github.com/rjrodger/use-plugin) module for
-an example of practical usage.
-
-
-# Support
-
 If you're using this module, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
-
-[![Gitter chat](https://badges.gitter.im/rjrodger/eraro.png)](https://gitter.im/rjrodger/eraro)
 
 
 # Quick example
@@ -134,14 +124,14 @@ var err0 = error('code0',{foo:'FOO',bar:'BAR'})
 "mylib: The first error, foo is FOO." === err0.message
 ```
 
-The message templates are [underscorejs templates](http://underscorejs.org/#template) 
+The message templates are [underscorejs templates](http://underscorejs.org/#template)
 with the default settings.
 
 If you specify a message directly, this is also interpreted as a template:
 
 ```JavaScript
 var err0 = error('code2',
-                 'My custom message, details: <%=util.inspect(zed)%>', 
+                 'My custom message, details: <%=util.inspect(zed)%>',
                  {zed:{a:1,b:2}})
 "mylib: My custom message, details: { a: 1, b: 2 }" === err0.message
 ```
@@ -156,7 +146,7 @@ The returned Error object has the following additional properties:
    * _**package-name**_: Boolean (true); a convenience marker for the package
    * _msg_: String; the generated message, may differ from original exception message (if any)
    * _details_: Object; contextual details of error
-   * _callpoint_: String; first line of stacktrace that is external to eraro and calling module 
+   * _callpoint_: String; first line of stacktrace that is external to eraro and calling module
 
 You can pass in an existing Error object. The additional properties
 will be added to it, but the original message will be used as the
@@ -170,7 +160,7 @@ When creating an _error_ function, you can use the following options:
    * _package_ : (optional) String; package name to mark Error objects
    * _prefix_  : (optional) Boolean/String; If false, then no prefix is used; If not defined, the package name is used
    * _module_  : (optional) Object; _module_ object to use as starting point for _require_ calls
-   * _msgmap_  : (optional) Object; map codes to message templates 
+   * _msgmap_  : (optional) Object; map codes to message templates
    * _inspect_ : (optional) Boolean; If true, _util.inspect_ is called on values; default: true.
 
 
@@ -182,4 +172,13 @@ For real-world usage examples, see:
   * _[seneca](http://github.com/rjrodger/seneca)_: a micro-services framework for Node.js
 
 
-
+[npm-badge]: https://badge.fury.io/js/eraro.svg
+[npm-url]: https://badge.fury.io/js/eraro
+[travis-badge]: https://api.travis-ci.org/rjrodger/eraro.svg
+[travis-url]: https://travis-ci.org/rjrodger/eraro
+[coveralls-badge]:https://coveralls.io/repos/rjrodger/eraro/badge.svg?branch=master&service=github
+[coveralls-url]: https://coveralls.io/github/rjrodger/eraro?branch=master
+[david-badge]: https://david-dm.org/rjrodger/eraro.svg
+[david-url]: https://david-dm.org/rjrodger/eraro
+[gitter-badge]: https://badges.gitter.im/rjrodger/eraro.svg
+[gitter-url]: https://gitter.im/rjrodger/eraro
