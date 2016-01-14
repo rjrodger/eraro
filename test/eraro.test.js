@@ -88,7 +88,8 @@ describe('eraro', function(){
     it('handle templates', function(done){
 
         expect(eraro('b0','<%=foo(1)%>').message).to
-            .equal("foo: <%=foo(1)%> VALUES:{ code: \'b0\' } TEMPLATE ERROR: TypeError: foo is not a function")
+            .contain("foo: <%=foo(1)%> VALUES:{ code: \'b0\' } TEMPLATE ERROR: TypeError:")
+            .and.contain("is not a function")
 
         var templatedError = eraro('i0','<%=a%>', {a: {b: 99 }})
         expect(templatedError.message).to.equal('foo: { b: 99 }')

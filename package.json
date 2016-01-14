@@ -4,7 +4,7 @@
   "description": "Create JavaScript Error objects with code strings, context details, and templated messages.",
   "main": "eraro.js",
   "scripts": {
-    "test": "lab -P test",
+    "test": "lab -v -P test",
     "coverage": "lab -s -P test -r lcov | coveralls",
     "build": "./build.sh"
   },
