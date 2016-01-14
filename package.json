@@ -4,8 +4,8 @@
   "description": "Create JavaScript Error objects with code strings, context details, and templated messages.",
   "main": "eraro.js",
   "scripts": {
-    "test": "lab test/*.test.js",
-    "lab -s test/*.spec.js -r lcov | coveralls",
+    "test": "lab -P test",
+    "coverage": "lab -s -P test -r lcov | coveralls",
     "build": "./build.sh"
   },
   "repository": {
@@ -34,6 +34,8 @@
   "devDependencies": {
     "code": "^1.5.0",
     "coveralls": "^2.11.6",
+    "docco": "^0.7.0",
+    "jshint": "^2.8.0",
     "lab": "^6.2.0"
   }
 }
