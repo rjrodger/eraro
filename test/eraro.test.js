@@ -39,50 +39,107 @@ describe('eraro', function(){
     })
 
 
+    describe('several error definitions', function (done) {
 
-    it('several error devinitions', function(done){
-        var e2 = eraro('c2',{a:2}),
-            e3 = eraro('c3'),
-            e4 = eraro(),
-            e41 = eraro(eraro('c41'))
+     it('with prefix and context', function (done) {
+            var erraror = eraro('c2', {a: 2})
+            expect(describeError(erraror)).to.deep.equal({
+                message: 'foo: c2', code: 'c2',
+                package: 'foo', msg: 'foo: c2', details: {a: 2}
+            })
+            done()
+        })
 
-        expect(describeError(e2)).to.deep.equal({ message: 'foo: c2', code: 'c2',
-                                                  package: 'foo', msg: 'foo: c2', details: { a: 2 } })
-        expect(describeError(e3)).to.deep.equal({ message: 'foo: c3', code: 'c3',
-                                                  package: 'foo', msg: 'foo: c3', details: {} })
-        expect(describeError(e4)).to.deep.equal({ message: 'foo: unknown', code: 'unknown',
-                                                  package: 'foo', msg: 'foo: unknown', details: {} })
-        expect(describeError(e41)).to.deep.equal({ message: 'foo: c41', code: 'c41', package: 'foo',
-                                                   msg: 'foo: c41', details: {} })
-        done()
+        it('with prefix', function (done) {
+            var erraror = eraro('c3')
+            expect(describeError(erraror)).to.deep.equal({
+                message: 'foo: c3', code: 'c3',
+                package: 'foo', msg: 'foo: c3', details: {}
+            })
+            done()
+        })
+
+        it('with no arg', function (done) {
+            var erraror = eraro()
+            expect(describeError(erraror)).to.deep.equal({
+                message: 'foo: unknown', code: 'unknown',
+                package: 'foo', msg: 'foo: unknown', details: {}
+            })
+            done()
+        })
+
+        it('with an other erraro', function (done) {
+            var erraror = eraro(eraro('c41'))
+            expect(describeError(erraror)).to.deep.equal({
+                message: 'foo: c41', code: 'c41', package: 'foo',
+                msg: 'foo: c41', details: {}
+            })
+            done()
+        })
     })
 
 
-    it('wrap an error in details', function(done){
+    describe('wrap an error in details', function () {
 
-        var x0 = new Error('x0'),
-            x1 = new Error('x1'),
-            x11 = new Error('x11'),
-            x2 = new Error('x2')
+     it('simple error', function (done) {
+            var err = new Error('x0')
+            var erraror = eraro(err)
 
-        var e5 = eraro(x0),
-            e6 = eraro(x1,'c4'),
-            e61 = eraro(x11, 'c401'),
-            e7 = eraro(x2, 'c5', {a: 3})
+            expect(describeError(erraror)).to.deep.equal({
+                message: 'foo: x0',
+                code: 'x0',
+                package: 'foo',
+                msg: 'foo: x0',
+                details: {'orig$': err, 'message$': 'x0'}
+            }) //  "[Error: x0]"
+            done()
+        })
 
-        expect(describeError(e5)).to.deep.equal({ message: 'foo: x0', code: 'x0', package: 'foo', msg: 'foo: x0', details: { 'orig$': x0, 'message$': 'x0' } }) //  "[Error: x0]"
+        it('non defined prefix', function (done) {
+            var err = new Error('x1')
+            var erraror = eraro(err, 'c4')
 
-        expect(describeError(e6)).to.deep.equal({ message: 'foo: x1', code: 'c4', package: 'foo', msg: 'foo: x1', details: { 'orig$': x1, 'message$': 'x1' } }) // "[Error: x1]"
+            expect(describeError(erraror)).to.deep.equal({
+                message: 'foo: x1',
+                code: 'c4',
+                package: 'foo',
+                msg: 'foo: x1',
+                details: {'orig$': err, 'message$': 'x1'}
+            }) // "[Error: x1]"
+            expect(erraror.orig).to.deep.equal(err)
+            done()
+        })
 
-        expect(e6.orig).to.deep.equal(x1)
+        it('defined prefix', function (done) {
+            var err = new Error('x11')
+            var erraror = eraro(err, 'c401')
 
-        expect(describeError(e61)).to.deep.equal({ message: 'foo: C401 Message', code: 'c401', package: 'foo', msg: 'foo: C401 Message', details: { 'orig$': x11, 'message$': 'x11' } })
+            expect(describeError(erraror)).to.deep.equal({
+                message: 'foo: C401 Message',
+                code: 'c401',
+                package: 'foo',
+                msg: 'foo: C401 Message',
+                details: {'orig$': err, 'message$': 'x11'}
+            })
+            expect(erraror.orig).to.equal(err)
 
-        expect(e61.orig).to.equal(x11)
+            done()
+        })
 
-        expect(describeError(e7)).to.deep.equal({ message: 'foo: x2', code: 'c5', package: 'foo', msg: 'foo: x2', details: { a: 3, 'orig$': x2, 'message$': 'x2' } }) // [Error: x2]
+        it('defined prefix', function (done) {
+            var err = new Error('x2')
+            var erraror = eraro(err, 'c5', {a: 3})
 
-        done()
+            expect(describeError(erraror)).to.deep.equal({
+                message: 'foo: x2',
+                code: 'c5',
+                package: 'foo',
+                msg: 'foo: x2',
+                details: {a: 3, 'orig$': err, 'message$': 'x2'}
+            }) // [Error: x2]
+
+            done()
+        })
     })
 
     it('handle templates', function(done){
