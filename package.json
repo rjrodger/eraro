@@ -4,7 +4,9 @@
   "description": "Create JavaScript Error objects with code strings, context details, and templated messages.",
   "main": "eraro.js",
   "scripts": {
-    "test": "node test/eraro.test.js"
+    "test": "lab -v -P test -t 80",
+    "coverage": "lab -s -P test -r lcov | coveralls",
+    "prettier": "prettier --write --no-semi --single-quote *.js lib/*.js test/*.js"
   },
   "repository": {
     "type": "git",
@@ -17,16 +19,25 @@
   ],
   "author": "Richard Rodger (http://richardrodger.com)",
   "license": "MIT",
+  "contributors": [
+    "Adrien Becchis (https://github.com/AdrieanKhisbe)"
+  ],
   "bugs": {
     "url": "https://github.com/rjrodger/eraro/issues"
   },
   "homepage": "https://github.com/rjrodger/eraro",
   "dependencies": {
-    "lodash": "4.17.10"
+    "lodash": "4.17"
   },
   "files": [
     "README.md",
     "LICENSE.txt",
     "eraro.js"
-  ]
+  ],
+  "devDependencies": {
+    "code": "4",
+    "coveralls": "3",
+    "lab": "14",
+    "prettier": "1"
+  }
 }
