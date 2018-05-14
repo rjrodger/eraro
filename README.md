@@ -3,13 +3,7 @@ eraro
 
 #### Create JavaScript Error objects with code strings, context details, and templated messages.
 
-Current Version: 0.4.1
-
-Tested on: node 0.10.35
-
 [![Build Status](https://travis-ci.org/rjrodger/eraro.png?branch=master)](https://travis-ci.org/rjrodger/eraro)
-
-[Annotated Source](http://rjrodger.github.io/eraro/doc/eraro.html)
 
 For use in library modules to generate contextual errors with useful
 meta data. Your library module can throw or pass (to a callback) an
@@ -25,7 +19,6 @@ an example of practical usage.
 
 If you're using this module, feel free to contact me on twitter if you have any questions! :) [@rjrodger](http://twitter.com/rjrodger)
 
-[![Gitter chat](https://badges.gitter.im/rjrodger/eraro.png)](https://gitter.im/rjrodger/eraro)
 
 
 # Quick example

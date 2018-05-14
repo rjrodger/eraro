@@ -4,8 +4,7 @@
   "description": "Create JavaScript Error objects with code strings, context details, and templated messages.",
   "main": "eraro.js",
   "scripts": {
-    "test": "./test.sh",
-    "build": "./build.sh"
+    "test": "node test/eraro.test.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +22,7 @@
   },
   "homepage": "https://github.com/rjrodger/eraro",
   "dependencies": {
-    "lodash": "~2.4.1"
+    "lodash": "4.17.10"
   },
   "files": [
     "README.md",
