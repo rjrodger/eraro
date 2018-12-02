@@ -41,6 +41,12 @@ describe('eraro', function() {
     done()
   })
 
+  it('has', function(done) {
+    expect(eraro.has('c401')).true()
+    expect(eraro.has('not-a-code')).false()
+    done()
+  })
+
   describe('several error definitions', function(done) {
     it('with prefix and context', function(done) {
       var erraror = eraro('c2', { a: 2 })

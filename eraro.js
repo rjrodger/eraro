@@ -49,10 +49,10 @@ function eraro(options) {
     false === options.prefix
       ? ''
       : _.isString(options.prefix)
-        ? options.prefix
-        : _.isString(options.package)
-          ? options.package + ': '
-          : ''
+      ? options.prefix
+      : _.isString(options.package)
+      ? options.package + ': '
+      : ''
 
   var packaje = options.package || 'unknown'
   var callmodule = options.module || module
@@ -80,18 +80,18 @@ function eraro(options) {
     code = _.isString(code)
       ? code
       : ex
+      ? ex.code
         ? ex.code
-          ? ex.code
-          : ex.message
-            ? ex.message
-            : 'unknown'
+        : ex.message
+        ? ex.message
         : 'unknown'
+      : 'unknown'
 
     details = _.isObject(details)
       ? details
       : _.isObject(msg) && !_.isString(msg)
-        ? msg
-        : {}
+      ? msg
+      : {}
 
     msg = _.isString(msg) ? msg : null
     msg = buildmessage(
@@ -134,6 +134,10 @@ function eraro(options) {
   }
 
   errormaker.callpoint = callpoint
+
+  errormaker.has = function(code) {
+    return !!msgmap[code]
+  }
 
   return errormaker
 }
@@ -207,10 +211,10 @@ function buildmessage(
     (_.isString(msg)
       ? msg
       : _.isString(msgmap[code])
-        ? msgmap[code]
-        : ex
-          ? originalmsg(options.override, ex)
-          : code)
+      ? msgmap[code]
+      : ex
+      ? originalmsg(options.override, ex)
+      : code)
 
   // These are the inserts.
   var valmap = _.extend({}, details, { code: code })
