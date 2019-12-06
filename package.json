@@ -1,6 +1,6 @@
 {
   "name": "eraro",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Create JavaScript Error objects with code strings, context details, and templated messages.",
   "main": "eraro.js",
   "scripts": {

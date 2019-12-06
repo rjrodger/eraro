@@ -36,7 +36,6 @@ describe('eraro', function() {
     expect(e1.foo).to.be.true()
     expect(e1.code).to.equal('c1')
     expect(e1.details.a).to.equal(1)
-
   })
 
   it('has', async () => {
@@ -130,7 +129,6 @@ describe('eraro', function() {
         details: { orig$: err, message$: 'x11' }
       })
       expect(erraror.orig).to.equal(err)
-
     })
 
     it('defined prefix', async () => {
@@ -144,7 +142,6 @@ describe('eraro', function() {
         msg: 'foo: x2',
         details: { a: 3, orig$: err, message$: 'x2' }
       }) // [Error: x2]
-
     })
   })
 
@@ -157,7 +154,6 @@ describe('eraro', function() {
 
     var templatedError = eraro('i0', '<%=a%>', { a: { b: 99 } })
     expect(templatedError.message).to.equal('foo: { b: 99 }')
-
   })
 
   it('handle different erraros', async () => {
@@ -166,6 +162,5 @@ describe('eraro', function() {
 
     var barEraro = Eraro({ package: 'bar', prefix: false })
     expect(barEraro('code1').message).to.equal('code1')
-
   })
 })

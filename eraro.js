@@ -48,9 +48,9 @@ function eraro(options) {
   var msgprefix =
     false === options.prefix
       ? ''
-      : 'string' === typeof(options.prefix)
+      : 'string' === typeof options.prefix
       ? options.prefix
-      : 'string' === typeof(options.package)
+      : 'string' === typeof options.package
       ? options.package + ': '
       : ''
 
@@ -77,23 +77,25 @@ function eraro(options) {
       details = arguments[2]
     }
 
-    code = 'string' === typeof(code)
-      ? code
-      : ex
-      ? ex.code
+    code =
+      'string' === typeof code
+        ? code
+        : ex
         ? ex.code
-        : ex.message
-        ? ex.message
+          ? ex.code
+          : ex.message
+          ? ex.message
+          : 'unknown'
         : 'unknown'
-      : 'unknown'
 
-    details = 'object' === typeof(details)
-      ? details
-      : 'object' === typeof(msg) && 'string' !== typeof(msg)
-      ? msg
-      : {}
+    details =
+      'object' === typeof details
+        ? details
+        : 'object' === typeof msg && 'string' !== typeof msg
+        ? msg
+        : {}
 
-    msg = 'string' === typeof(msg) ? msg : null
+    msg = 'string' === typeof msg ? msg : null
     msg = buildmessage(
       options,
       msg,
@@ -165,7 +167,7 @@ function callpoint(error, markers) {
 
       var found = false
       for (var j = 0; j < markers.length; j++) {
-        if ('string' === typeof(markers[j])) {
+        if ('string' === typeof markers[j]) {
           found = -1 != line.indexOf(markers[j])
           if (found) break
         }
@@ -174,7 +176,7 @@ function callpoint(error, markers) {
       if (!found) break line_loop
     }
 
-    out = 'string' === typeof(lines[i]) ? lines[i].substring(4) : out
+    out = 'string' === typeof lines[i] ? lines[i].substring(4) : out
   }
 
   return out
@@ -208,9 +210,9 @@ function buildmessage(
 ) {
   var message =
     msgprefix +
-    ('string' === typeof(msg)
+    ('string' === typeof msg
       ? msg
-      : 'string' === typeof(msgmap[code])
+      : 'string' === typeof msgmap[code]
       ? msgmap[code]
       : ex
       ? originalmsg(options.override, ex)
@@ -237,7 +239,8 @@ function buildmessage(
     if ({ undefined: 1, NaN: 1 }[key]) {
       key = key + '$'
     }
-    valstrmap[key] = inspect && 'string' !== typeof(val) ? Util.inspect(val) : val
+    valstrmap[key] =
+      inspect && 'string' !== typeof val ? Util.inspect(val) : val
   })
 
   var done = false
