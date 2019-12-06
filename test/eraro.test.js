@@ -1,9 +1,8 @@
-/* Copyright (c) 2014-2018 Richard Rodger and other contributors, MIT License */
+/* Copyright (c) 2014-2019 Richard Rodger and other contributors, MIT License */
 'use strict'
 
-var util = require('util')
-var Lab = require('lab')
-var Code = require('code')
+var Lab = require('@hapi/lab')
+var Code = require('@hapi/code')
 
 var lab = (exports.lab = Lab.script())
 var describe = lab.describe
@@ -29,7 +28,7 @@ function describeError(err) {
 }
 
 describe('eraro', function() {
-  it('basic error', function(done) {
+  it('basic error', async () => {
     var e1 = eraro('c1', 'm1 a:<%=a%>', { a: 1 })
 
     expect(e1.message).to.equal('foo: m1 a:1')
@@ -38,17 +37,15 @@ describe('eraro', function() {
     expect(e1.code).to.equal('c1')
     expect(e1.details.a).to.equal(1)
 
-    done()
   })
 
-  it('has', function(done) {
+  it('has', async () => {
     expect(eraro.has('c401')).true()
     expect(eraro.has('not-a-code')).false()
-    done()
   })
 
-  describe('several error definitions', function(done) {
-    it('with prefix and context', function(done) {
+  describe('several error definitions', async () => {
+    it('with prefix and context', async () => {
       var erraror = eraro('c2', { a: 2 })
       expect(describeError(erraror)).to.equal({
         message: 'foo: c2',
@@ -57,10 +54,9 @@ describe('eraro', function() {
         msg: 'foo: c2',
         details: { a: 2 }
       })
-      done()
     })
 
-    it('with prefix', function(done) {
+    it('with prefix', async () => {
       var erraror = eraro('c3')
       expect(describeError(erraror)).to.equal({
         message: 'foo: c3',
@@ -69,10 +65,9 @@ describe('eraro', function() {
         msg: 'foo: c3',
         details: {}
       })
-      done()
     })
 
-    it('with no arg', function(done) {
+    it('with no arg', async () => {
       var erraror = eraro()
       expect(describeError(erraror)).to.equal({
         message: 'foo: unknown',
@@ -81,10 +76,9 @@ describe('eraro', function() {
         msg: 'foo: unknown',
         details: {}
       })
-      done()
     })
 
-    it('with an other erraro', function(done) {
+    it('with an other erraro', async () => {
       var erraror = eraro(eraro('c41'))
       expect(describeError(erraror)).to.equal({
         message: 'foo: c41',
@@ -93,12 +87,11 @@ describe('eraro', function() {
         msg: 'foo: c41',
         details: {}
       })
-      done()
     })
   })
 
   describe('wrap an error in details', function() {
-    it('simple error', function(done) {
+    it('simple error', async () => {
       var err = new Error('x0')
       var erraror = eraro(err)
 
@@ -109,10 +102,9 @@ describe('eraro', function() {
         msg: 'foo: x0',
         details: { orig$: err, message$: 'x0' }
       }) //  "[Error: x0]"
-      done()
     })
 
-    it('non defined prefix', function(done) {
+    it('non defined prefix', async () => {
       var err = new Error('x1')
       var erraror = eraro(err, 'c4')
 
@@ -124,10 +116,9 @@ describe('eraro', function() {
         details: { orig$: err, message$: 'x1' }
       }) // "[Error: x1]"
       expect(erraror.orig).to.equal(err)
-      done()
     })
 
-    it('defined prefix', function(done) {
+    it('defined prefix', async () => {
       var err = new Error('x11')
       var erraror = eraro(err, 'c401')
 
@@ -140,10 +131,9 @@ describe('eraro', function() {
       })
       expect(erraror.orig).to.equal(err)
 
-      done()
     })
 
-    it('defined prefix', function(done) {
+    it('defined prefix', async () => {
       var err = new Error('x2')
       var erraror = eraro(err, 'c5', { a: 3 })
 
@@ -155,11 +145,10 @@ describe('eraro', function() {
         details: { a: 3, orig$: err, message$: 'x2' }
       }) // [Error: x2]
 
-      done()
     })
   })
 
-  it('handle templates', function(done) {
+  it('handle templates', async () => {
     expect(eraro('b0', '<%=foo(1)%>').message)
       .to.contain(
         "foo: <%=foo(1)%> VALUES:{ code: 'b0' } TEMPLATE ERROR: TypeError:"
@@ -169,16 +158,14 @@ describe('eraro', function() {
     var templatedError = eraro('i0', '<%=a%>', { a: { b: 99 } })
     expect(templatedError.message).to.equal('foo: { b: 99 }')
 
-    done()
   })
 
-  it('handle different erraros', function(done) {
+  it('handle different erraros', async () => {
     var fooEraro = Eraro({ package: 'barfoo', prefix: 'FOO-' })
     expect(fooEraro('code0').message).to.equal('FOO-code0')
 
     var barEraro = Eraro({ package: 'bar', prefix: false })
     expect(barEraro('code1').message).to.equal('code1')
 
-    done()
   })
 })

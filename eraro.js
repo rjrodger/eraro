@@ -6,10 +6,10 @@
 'use strict'
 
 // #### System modules
-var util = require('util')
+const Util = require('util')
 
 // #### External modules
-var _ = require('lodash')
+var Template = require('lodash.template')
 
 // #### Exports
 module.exports = eraro
@@ -22,7 +22,7 @@ module.exports = eraro
 //      * _prefix_  : (optional) Boolean/String; If false, then no prefix is used; If not defined, the package name is used
 //      * _module_  : (optional) Object; _module_ object to use as starting point for _require_ calls
 //      * _msgmap_  : (optional) Object; map codes to message templates
-//      * _inspect_ : (optional) Boolean; If true, _util.inspect_ is called on values; default: true.
+//      * _inspect_ : (optional) Boolean; If true, _Util.inspect_ is called on values; default: true.
 //
 // Returns: Function
 //
@@ -48,9 +48,9 @@ function eraro(options) {
   var msgprefix =
     false === options.prefix
       ? ''
-      : _.isString(options.prefix)
+      : 'string' === typeof(options.prefix)
       ? options.prefix
-      : _.isString(options.package)
+      : 'string' === typeof(options.package)
       ? options.package + ': '
       : ''
 
@@ -67,7 +67,7 @@ function eraro(options) {
   var errormaker = function(ex, code, msg, details) {
     var internalex = false
 
-    if (util.isError(ex)) {
+    if (Util.isError(ex)) {
       if (ex.eraro && !options.override) return ex
     } else {
       internalex = true
@@ -77,7 +77,7 @@ function eraro(options) {
       details = arguments[2]
     }
 
-    code = _.isString(code)
+    code = 'string' === typeof(code)
       ? code
       : ex
       ? ex.code
@@ -87,13 +87,13 @@ function eraro(options) {
         : 'unknown'
       : 'unknown'
 
-    details = _.isObject(details)
+    details = 'object' === typeof(details)
       ? details
-      : _.isObject(msg) && !_.isString(msg)
+      : 'object' === typeof(msg) && 'string' !== typeof(msg)
       ? msg
       : {}
 
-    msg = _.isString(msg) ? msg : null
+    msg = 'string' === typeof(msg) ? msg : null
     msg = buildmessage(
       options,
       msg,
@@ -150,7 +150,7 @@ function eraro(options) {
 //
 // Returns: String; stack trace line, with indent removed
 function callpoint(error, markers) {
-  markers = _.isArray(markers) ? markers : []
+  markers = Array.isArray(markers) ? markers : []
 
   var stack = error ? error.stack : null
   var out = ''
@@ -165,7 +165,7 @@ function callpoint(error, markers) {
 
       var found = false
       for (var j = 0; j < markers.length; j++) {
-        if (_.isString(markers[j])) {
+        if ('string' === typeof(markers[j])) {
           found = -1 != line.indexOf(markers[j])
           if (found) break
         }
@@ -174,7 +174,7 @@ function callpoint(error, markers) {
       if (!found) break line_loop
     }
 
-    out = _.isString(lines[i]) ? lines[i].substring(4) : out
+    out = 'string' === typeof(lines[i]) ? lines[i].substring(4) : out
   }
 
   return out
@@ -208,24 +208,27 @@ function buildmessage(
 ) {
   var message =
     msgprefix +
-    (_.isString(msg)
+    ('string' === typeof(msg)
       ? msg
-      : _.isString(msgmap[code])
+      : 'string' === typeof(msgmap[code])
       ? msgmap[code]
       : ex
       ? originalmsg(options.override, ex)
       : code)
 
   // These are the inserts.
-  var valmap = _.extend({}, details, { code: code })
+  var valmap = Object.assign({}, details, { code: code })
 
+  // TODO: is this needed anymore with _ removed?
   // Workaround to prevent underscore blowing up if properties are not
   // found.  Reserved words and undefined need to be suffixed with $
   // in the template interpolates.
 
-  var valstrmap = { util: util, _: _ }
-  _.each(valmap, function(val, key) {
-    /* jshint evil:true */
+  var valstrmap = { util: Util }
+  Object.entries(valmap).forEach(function(entry) {
+    var key = entry[0]
+    var val = entry[1]
+
     try {
       eval('var ' + key + ';')
     } catch (e) {
@@ -234,13 +237,13 @@ function buildmessage(
     if ({ undefined: 1, NaN: 1 }[key]) {
       key = key + '$'
     }
-    valstrmap[key] = inspect && !_.isString(val) ? util.inspect(val) : val
+    valstrmap[key] = inspect && 'string' !== typeof(val) ? Util.inspect(val) : val
   })
 
   var done = false
   while (!done) {
     try {
-      var tm = _.template(message)
+      var tm = Template(message)
       message = tm(valstrmap)
       done = true
     } catch (e) {
@@ -258,7 +261,7 @@ function buildmessage(
         message =
           message +
           ' VALUES:' +
-          util.inspect(valmap, { depth: 2 }) +
+          Util.inspect(valmap, { depth: 2 }) +
           ' TEMPLATE ERROR: ' +
           e
       }
