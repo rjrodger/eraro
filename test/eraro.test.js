@@ -1,4 +1,4 @@
-/* Copyright (c) 2014-2019 Richard Rodger and other contributors, MIT License */
+/* Copyright (c) 2014-2020 Richard Rodger and other contributors, MIT License */
 'use strict'
 
 var Lab = require('@hapi/lab')
@@ -93,26 +93,34 @@ describe('eraro', function() {
     it('simple error', async () => {
       var err = new Error('x0')
       var erraror = eraro(err)
+      var errdesc = describeError(erraror)
 
-      expect(describeError(erraror)).to.equal({
+      expect(errdesc.details.errline).include('eraro.test.js')
+      delete errdesc.details.errline
+
+      expect(errdesc).to.equal({
         message: 'foo: x0',
         code: 'x0',
         package: 'foo',
         msg: 'foo: x0',
-        details: { orig$: err, message$: 'x0' }
+        details: { errmsg: 'x0', orig$: err, message$: 'x0' }
       }) //  "[Error: x0]"
     })
 
     it('non defined prefix', async () => {
       var err = new Error('x1')
       var erraror = eraro(err, 'c4')
+      var errdesc = describeError(erraror)
 
-      expect(describeError(erraror)).to.equal({
+      expect(errdesc.details.errline).include('eraro.test.js')
+      delete errdesc.details.errline
+
+      expect(errdesc).to.equal({
         message: 'foo: x1',
         code: 'c4',
         package: 'foo',
         msg: 'foo: x1',
-        details: { orig$: err, message$: 'x1' }
+        details: { errmsg: 'x1', orig$: err, message$: 'x1' }
       }) // "[Error: x1]"
       expect(erraror.orig).to.equal(err)
     })
@@ -120,13 +128,17 @@ describe('eraro', function() {
     it('defined prefix', async () => {
       var err = new Error('x11')
       var erraror = eraro(err, 'c401')
+      var errdesc = describeError(erraror)
 
-      expect(describeError(erraror)).to.equal({
+      expect(errdesc.details.errline).exists()
+      delete errdesc.details.errline
+
+      expect(errdesc).to.equal({
         message: 'foo: C401 Message',
         code: 'c401',
         package: 'foo',
         msg: 'foo: C401 Message',
-        details: { orig$: err, message$: 'x11' }
+        details: { errmsg: 'x11', orig$: err, message$: 'x11' }
       })
       expect(erraror.orig).to.equal(err)
     })
@@ -134,13 +146,17 @@ describe('eraro', function() {
     it('defined prefix', async () => {
       var err = new Error('x2')
       var erraror = eraro(err, 'c5', { a: 3 })
+      var errdesc = describeError(erraror)
 
-      expect(describeError(erraror)).to.equal({
+      expect(errdesc.details.errline).exists()
+      delete errdesc.details.errline
+
+      expect(errdesc).to.equal({
         message: 'foo: x2',
         code: 'c5',
         package: 'foo',
         msg: 'foo: x2',
-        details: { a: 3, orig$: err, message$: 'x2' }
+        details: { errmsg: 'x2', a: 3, orig$: err, message$: 'x2' }
       }) // [Error: x2]
     })
   })

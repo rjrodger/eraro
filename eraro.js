@@ -65,12 +65,9 @@ function eraro(options) {
   if (filename) markers.push(filename)
 
   var errormaker = function(ex, code, msg, details) {
-    var internalex = false
-
     if (Util.isError(ex)) {
       if (ex.eraro && !options.override) return ex
     } else {
-      internalex = true
       ex = null
       code = arguments[0]
       msg = arguments[1]
@@ -94,6 +91,11 @@ function eraro(options) {
         : 'object' === typeof msg && 'string' !== typeof msg
         ? msg
         : {}
+
+    if (ex) {
+      details.errmsg = ex.message
+      details.errline = callpoint(ex, markers)
+    }
 
     msg = 'string' === typeof msg ? msg : null
     msg = buildmessage(
@@ -130,7 +132,7 @@ function eraro(options) {
     err.details = details
 
     err.stack = ex ? ex.stack : err.stack
-    err.callpoint = callpoint(err, markers)
+    err.callpoint = details.errline || callpoint(err, markers)
 
     return err
   }
@@ -159,7 +161,6 @@ function callpoint(error, markers) {
 
   if (stack) {
     var lines = stack.split('\n')
-    var done = false
     var i
 
     line_loop: for (i = 1; i < lines.length; i++) {

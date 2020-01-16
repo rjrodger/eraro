@@ -134,6 +134,10 @@ var err0 = error('code2',
 "mylib: My custom message, details: { a: 1, b: 2 }" === err0.message
 ```
 
+Message templates always have the original error message and first
+stack line details available as: `message: <%=errmsg%>, line:
+<%=errline%>`.
+
 
 # The returned Error object
 
@@ -178,3 +182,4 @@ For real-world usage examples, see:
 [coveralls-url]: https://coveralls.io/github/rjrodger/eraro?branch=master
 [david-badge]: https://david-dm.org/rjrodger/eraro.svg
 [david-url]: https://david-dm.org/rjrodger/eraro
+

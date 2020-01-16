@@ -1,10 +1,10 @@
 {
   "name": "eraro",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Create JavaScript Error objects with code strings, context details, and templated messages.",
   "main": "eraro.js",
   "scripts": {
-    "test": "lab -v -P test -t 80",
+    "test": "lab -L -v -P test -t 80",
     "coveralls": "lab -s -P test -r lcov -I URL,URLSearchParams | coveralls",
     "prettier": "prettier --write --no-semi --single-quote *.js lib/*.js test/*.js",
     "clean": "rm -rf node_modules package-lock.json yarn.lock",
@@ -40,7 +40,7 @@
   ],
   "devDependencies": {
     "@hapi/lab": "^21.0.0",
-    "@hapi/code": "^7.0.0",
+    "@hapi/code": "^8.0.1",
     "coveralls": "^3.0.9",
     "prettier": "^1.19.1"
   }
