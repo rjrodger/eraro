@@ -2,9 +2,8 @@ eraro
 =====
 
 [![npm version][npm-badge]][npm-url]
-[![Build Status][travis-badge]][travis-url]
+[![build](https://github.com/rjrodger/eraro/actions/workflows/build.yml/badge.svg)](https://github.com/rjrodger/eraro/actions/workflows/build.yml)
 [![Coverage Status][coveralls-badge]][coveralls-url]
-[![Dependency Status][david-badge]][david-url]
 
 #### Create JavaScript Error objects with code strings, context details, and templated messages.
 
