@@ -5,10 +5,11 @@
   "main": "eraro.js",
   "scripts": {
     "test": "lab -L -v -P test -t 80",
+    "test-some": "lab -v -P test -g",
     "coveralls": "lab -s -P test -r lcov -I URL,URLSearchParams | coveralls",
     "prettier": "prettier --write --no-semi --single-quote *.js lib/*.js test/*.js",
     "clean": "rm -rf node_modules package-lock.json yarn.lock",
-    "reset": "npm run clean && npm i && npm test",
+    "reset": "npm run clean && npm i && npm test && npm audit --production",
     "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
     "repo-publish": "npm run prettier && npm test && npm run repo-tag --registry http://registry.npmjs.org && npm publish --registry http://registry.npmjs.org "
   },
@@ -30,18 +31,15 @@
     "url": "https://github.com/rjrodger/eraro/issues"
   },
   "homepage": "https://github.com/rjrodger/eraro",
-  "dependencies": {
-    "lodash.template": "^4.5.0"
-  },
   "files": [
     "README.md",
     "LICENSE.txt",
     "eraro.js"
   ],
   "devDependencies": {
-    "@hapi/lab": "^21.0.0",
-    "@hapi/code": "^8.0.1",
-    "coveralls": "^3.0.9",
-    "prettier": "^1.19.1"
+    "@hapi/lab": "^25.1.3",
+    "@hapi/code": "^9.0.3",
+    "coveralls": "^3.1.1",
+    "prettier": "^3.0.3"
   }
 }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2014-2018 Richard Rodger, MIT License */
+/* Copyright (c) 2014-2023 Richard Rodger, MIT License */
 /* jshint node:true, asi:true, eqnull:true */
 
 // Create JavaScript Error objects with code strings, context details,
@@ -7,9 +7,6 @@
 
 // #### System modules
 const Util = require('util')
-
-// #### External modules
-var Template = require('lodash.template')
 
 // #### Exports
 module.exports = eraro
@@ -45,7 +42,7 @@ module.exports = eraro
 function eraro(options) {
   options = options || {}
 
-  var msgprefix =
+  const msgprefix =
     false === options.prefix
       ? ''
       : 'string' === typeof options.prefix
@@ -54,20 +51,25 @@ function eraro(options) {
       ? options.package + ': '
       : ''
 
-  var packaje = options.package || 'unknown'
-  var callmodule = options.module || module
-  var msgmap = options.msgmap || {}
-  var inspect = null == options.inspect ? true : !!options.inspect
+  const pkg = options.package || 'unknown'
+  const callmodule = options.module || module
+  const msgmap = options.msgmap || {}
+  const inspect = null == options.inspect ? true : !!options.inspect
 
-  var markers = [module.filename]
+  const markers = [module.filename]
 
-  var filename = callmodule.filename
-  if (filename) markers.push(filename)
-
-  var errormaker = function(ex, code, msg, details) {
+  const filename = callmodule.filename
+  if (filename) {
+    markers.push(filename)
+  }
+  
+  const errormaker = function(ex, code, msg, details) {
     if (Util.isError(ex)) {
-      if (ex.eraro && !options.override) return ex
-    } else {
+      if (ex.eraro && !options.override) {
+        return ex
+      }
+    }
+    else {
       ex = null
       code = arguments[0]
       msg = arguments[1]
@@ -109,7 +111,7 @@ function eraro(options) {
       ex
     )
 
-    var err = new Error(msg)
+    const err = new Error(msg)
 
     if (ex) {
       details.orig$ = null == details.orig$ ? ex : details.orig$
@@ -117,7 +119,7 @@ function eraro(options) {
         null == details.message$ ? ex.message : details.message$
 
       // drag along properties from original exception
-      for (var p in ex) {
+      for (const p in ex) {
         err[p] = ex[p]
       }
     }
@@ -126,8 +128,8 @@ function eraro(options) {
 
     err.orig = ex // orig
     err.code = code
-    err[packaje] = true
-    err.package = packaje
+    err[pkg] = true
+    err.package = pkg
     err.msg = msg
     err.details = details
 
@@ -156,18 +158,18 @@ function eraro(options) {
 function callpoint(error, markers) {
   markers = Array.isArray(markers) ? markers : []
 
-  var stack = error ? error.stack : null
-  var out = ''
+  const stack = error ? error.stack : null
+  let out = ''
 
   if (stack) {
-    var lines = stack.split('\n')
-    var i
-
+    const lines = stack.split('\n')
+    let i = 0
+    
     line_loop: for (i = 1; i < lines.length; i++) {
-      var line = lines[i]
+      const line = lines[i]
 
-      var found = false
-      for (var j = 0; j < markers.length; j++) {
+      let found = false
+      for (let j = 0; j < markers.length; j++) {
         if ('string' === typeof markers[j]) {
           found = -1 != line.indexOf(markers[j])
           if (found) break
@@ -209,7 +211,7 @@ function buildmessage(
   details,
   ex
 ) {
-  var message =
+  let message =
     msgprefix +
     ('string' === typeof msg
       ? msg
@@ -220,59 +222,29 @@ function buildmessage(
       : code)
 
   // These are the inserts.
-  var valmap = Object.assign({}, details, { code: code })
+  let valmap = Object.assign({}, details, { code: code })
 
-  // TODO: is this needed anymore with _ removed?
-  // Workaround to prevent underscore blowing up if properties are not
-  // found.  Reserved words and undefined need to be suffixed with $
-  // in the template interpolates.
+  message = message.replace(/<%=\s*(.*?)\s*%>/g,(m,p1)=>{
+    let val = valmap[p1]
+    val = 'object' === typeof val && null != val ?
+      stringify(val)
+      : val
 
-  var valstrmap = { util: Util }
-  Object.entries(valmap).forEach(function(entry) {
-    var key = entry[0]
-    var val = entry[1]
-
-    try {
-      eval('var ' + key + ';')
-    } catch (e) {
-      key = key + '$'
-    }
-    if ({ undefined: 1, NaN: 1 }[key]) {
-      key = key + '$'
-    }
-    valstrmap[key] =
-      inspect && 'string' !== typeof val ? Util.inspect(val) : val
+    return val
   })
-
-  var done = false
-  while (!done) {
-    try {
-      var tm = Template(message)
-      message = tm(valstrmap)
-      done = true
-    } catch (e) {
-      if (e instanceof ReferenceError) {
-        var m = /ReferenceError:\s+(.*?)\s+/.exec(e.toString())
-        if (m && m[1]) {
-          valstrmap[m[1]] = '[' + m[1] + '?]'
-        } else done = true
-      }
-
-      // Some other error - give up and just dump the properties at
-      // the end of the template.
-      else {
-        done = true
-        message =
-          message +
-          ' VALUES:' +
-          Util.inspect(valmap, { depth: 2 }) +
-          ' TEMPLATE ERROR: ' +
-          e
-      }
-    }
-  }
-
+    
   return message
+}
+
+
+function stringify(val) {
+  try {
+    return JSON.stringify(val).substring(0,111)
+      .replace(/([^\\])"/g,'$1')
+  }
+  catch(e) {
+    return ''+val
+  }
 }
 
 function originalmsg(override, ex) {
