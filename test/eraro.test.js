@@ -1,16 +1,9 @@
-/* Copyright (c) 2014-2020 Richard Rodger and other contributors, MIT License */
+/* Copyright (c) 2014-2023 Richard Rodger and other contributors, MIT License */
 'use strict'
 
-var Lab = require('@hapi/lab')
-var Code = require('@hapi/code')
 
-var lab = (exports.lab = Lab.script())
-var describe = lab.describe
-var it = lab.it
-var expect = Code.expect
-
-var Eraro = require('..')
-var eraro = Eraro({
+const Eraro = require('..')
+const eraro = Eraro({
   package: 'foo',
   msgmap: {
     c401: 'C401 Message'
@@ -28,25 +21,25 @@ function describeError(err) {
 }
 
 describe('eraro', function() {
-  it('basic error', () => {
-    var e1 = eraro('c1', 'm1 a:<%=a%>', { a: 1 })
+  test('basic error', () => {
+    const e1 = eraro('c1', 'm1 a:<%=a%>', { a: 1 })
 
-    expect(e1.message).to.equal('foo: m1 a:1')
-    expect(e1.package).to.equal('foo')
-    expect(e1.foo).to.be.true()
-    expect(e1.code).to.equal('c1')
-    expect(e1.details.a).to.equal(1)
+    expect(e1.message).toEqual('foo: m1 a:1')
+    expect(e1.package).toEqual('foo')
+    expect(e1.foo).toEqual(true)
+    expect(e1.code).toEqual('c1')
+    expect(e1.details.a).toEqual(1)
   })
 
-  it('has', () => {
-    expect(eraro.has('c401')).true()
-    expect(eraro.has('not-a-code')).false()
+  test('has', () => {
+    expect(eraro.has('c401')).toEqual(true)
+    expect(eraro.has('not-a-code')).toEqual(false)
   })
 
   describe('several error definitions', () => {
-    it('with prefix and context', () => {
-      var erraror = eraro('c2', { a: 2 })
-      expect(describeError(erraror)).to.equal({
+    test('with prefix and context', () => {
+      const erraror = eraro('c2', { a: 2 })
+      expect(describeError(erraror)).toEqual({
         message: 'foo: c2',
         code: 'c2',
         package: 'foo',
@@ -55,9 +48,9 @@ describe('eraro', function() {
       })
     })
 
-    it('with prefix', () => {
-      var erraror = eraro('c3')
-      expect(describeError(erraror)).to.equal({
+    test('with prefix', () => {
+      const erraror = eraro('c3')
+      expect(describeError(erraror)).toEqual({
         message: 'foo: c3',
         code: 'c3',
         package: 'foo',
@@ -66,9 +59,9 @@ describe('eraro', function() {
       })
     })
 
-    it('with no arg', () => {
-      var erraror = eraro()
-      expect(describeError(erraror)).to.equal({
+    test('with no arg', () => {
+      const erraror = eraro()
+      expect(describeError(erraror)).toEqual({
         message: 'foo: unknown',
         code: 'unknown',
         package: 'foo',
@@ -77,9 +70,9 @@ describe('eraro', function() {
       })
     })
 
-    it('with an other erraro', () => {
-      var erraror = eraro(eraro('c41'))
-      expect(describeError(erraror)).to.equal({
+    test('with an other erraro', () => {
+      const erraror = eraro(eraro('c41'))
+      expect(describeError(erraror)).toEqual({
         message: 'foo: c41',
         code: 'c41',
         package: 'foo',
@@ -90,15 +83,15 @@ describe('eraro', function() {
   })
 
   describe('wrap an error in details', function() {
-    it('simple error', () => {
-      var err = new Error('x0')
-      var erraror = eraro(err)
-      var errdesc = describeError(erraror)
+    test('simple error', () => {
+      const err = new Error('x0')
+      const erraror = eraro(err)
+      const errdesc = describeError(erraror)
 
-      expect(errdesc.details.errline).include('eraro.test.js')
+      expect(errdesc.details.errline).toContain('eraro.test.js')
       delete errdesc.details.errline
 
-      expect(errdesc).to.equal({
+      expect(errdesc).toEqual({
         message: 'foo: x0',
         code: 'x0',
         package: 'foo',
@@ -107,51 +100,51 @@ describe('eraro', function() {
       }) //  "[Error: x0]"
     })
 
-    it('non defined prefix', () => {
-      var err = new Error('x1')
-      var erraror = eraro(err, 'c4')
-      var errdesc = describeError(erraror)
+    test('non defined prefix', () => {
+      const err = new Error('x1')
+      const erraror = eraro(err, 'c4')
+      const errdesc = describeError(erraror)
 
-      expect(errdesc.details.errline).include('eraro.test.js')
+      expect(errdesc.details.errline).toContain('eraro.test.js')
       delete errdesc.details.errline
 
-      expect(errdesc).to.equal({
+      expect(errdesc).toEqual({
         message: 'foo: x1',
         code: 'c4',
         package: 'foo',
         msg: 'foo: x1',
         details: { errmsg: 'x1', orig$: err, message$: 'x1' }
       }) // "[Error: x1]"
-      expect(erraror.orig).to.equal(err)
+      expect(erraror.orig).toEqual(err)
     })
 
-    it('defined prefix', () => {
-      var err = new Error('x11')
-      var erraror = eraro(err, 'c401')
-      var errdesc = describeError(erraror)
+    test('defined prefix', () => {
+      const err = new Error('x11')
+      const erraror = eraro(err, 'c401')
+      const errdesc = describeError(erraror)
 
-      expect(errdesc.details.errline).exists()
+      expect(errdesc.details.errline).toBeDefined()
       delete errdesc.details.errline
 
-      expect(errdesc).to.equal({
+      expect(errdesc).toEqual({
         message: 'foo: C401 Message',
         code: 'c401',
         package: 'foo',
         msg: 'foo: C401 Message',
         details: { errmsg: 'x11', orig$: err, message$: 'x11' }
       })
-      expect(erraror.orig).to.equal(err)
+      expect(erraror.orig).toEqual(err)
     })
 
-    it('defined prefix', () => {
-      var err = new Error('x2')
-      var erraror = eraro(err, 'c5', { a: 3 })
-      var errdesc = describeError(erraror)
+    test('defined prefix', () => {
+      const err = new Error('x2')
+      const erraror = eraro(err, 'c5', { a: 3 })
+      const errdesc = describeError(erraror)
 
-      expect(errdesc.details.errline).exists()
+      expect(errdesc.details.errline).toBeDefined()
       delete errdesc.details.errline
 
-      expect(errdesc).to.equal({
+      expect(errdesc).toEqual({
         message: 'foo: x2',
         code: 'c5',
         package: 'foo',
@@ -162,21 +155,21 @@ describe('eraro', function() {
   })
 
   
-  it('handle templates', () => {
+  test('handle templates', () => {
     let te0 = eraro('te0', 'A <%=a%> <%=c%><%= d %> B',
                     { a: { b: 99,e:[true,false] }, c:'CCC', d:1 })
-    expect(te0.message).to.equal('foo: A {b:99,e:[true,false]} CCC1 B')
+    expect(te0.message).toEqual('foo: A {b:99,e:[true,false]} CCC1 B')
 
     let te1 = eraro('te1', '<%=code%><%=NotAVal%>')
-    expect(te1.message).to.equal('foo: te1undefined')
+    expect(te1.message).toEqual('foo: te1undefined')
   })
 
   
-  it('handle different erraros', () => {
-    var fooEraro = Eraro({ package: 'barfoo', prefix: 'FOO-' })
-    expect(fooEraro('code0').message).to.equal('FOO-code0')
+  test('handle different erraros', () => {
+    const fooEraro = Eraro({ package: 'barfoo', prefix: 'FOO-' })
+    expect(fooEraro('code0').message).toEqual('FOO-code0')
 
-    var barEraro = Eraro({ package: 'bar', prefix: false })
-    expect(barEraro('code1').message).to.equal('code1')
+    const barEraro = Eraro({ package: 'bar', prefix: false })
+    expect(barEraro('code1').message).toEqual('code1')
   })
 })
