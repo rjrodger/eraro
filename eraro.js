@@ -62,14 +62,13 @@ function eraro(options) {
   if (filename) {
     markers.push(filename)
   }
-  
-  const errormaker = function(ex, code, msg, details) {
+
+  const errormaker = function (ex, code, msg, details) {
     if (Util.isError(ex)) {
       if (ex.eraro && !options.override) {
         return ex
       }
-    }
-    else {
+    } else {
       ex = null
       code = arguments[0]
       msg = arguments[1]
@@ -88,11 +87,7 @@ function eraro(options) {
         : 'unknown'
 
     details =
-      'object' === typeof details
-        ? details
-        : 'object' === typeof msg && 'string' !== typeof msg
-        ? msg
-        : {}
+      'object' === typeof details ? details : 'object' === typeof msg ? msg : {}
 
     if (ex) {
       details.errmsg = ex.message
@@ -108,7 +103,7 @@ function eraro(options) {
       inspect,
       code,
       details,
-      ex
+      ex,
     )
 
     const err = new Error(msg)
@@ -141,7 +136,7 @@ function eraro(options) {
 
   errormaker.callpoint = callpoint
 
-  errormaker.has = function(code) {
+  errormaker.has = function (code) {
     return !!msgmap[code]
   }
 
@@ -164,7 +159,7 @@ function callpoint(error, markers) {
   if (stack) {
     const lines = stack.split('\n')
     let i = 0
-    
+
     line_loop: for (i = 1; i < lines.length; i++) {
       const line = lines[i]
 
@@ -206,10 +201,10 @@ function buildmessage(
   msg,
   msgmap,
   msgprefix,
-  inspect,
+  _inspect,
   code,
   details,
-  ex
+  ex,
 ) {
   let message =
     msgprefix +
@@ -224,26 +219,23 @@ function buildmessage(
   // These are the inserts.
   let valmap = Object.assign({}, details, { code: code })
 
-  message = message.replace(/<%=\s*(.*?)\s*%>/g,(m,p1)=>{
+  message = message.replace(/<%=\s*(.*?)\s*%>/g, (m, p1) => {
     let val = valmap[p1]
-    val = 'object' === typeof val && null != val ?
-      stringify(val)
-      : val
+    val = 'object' === typeof val && null != val ? stringify(val) : val
 
     return val
   })
-    
+
   return message
 }
 
-
 function stringify(val) {
   try {
-    return JSON.stringify(val).substring(0,111)
-      .replace(/([^\\])"/g,'$1')
-  }
-  catch(e) {
-    return ''+val
+    return JSON.stringify(val)
+      .substring(0, 111)
+      .replace(/([^\\])"/g, '$1')
+  } catch (e) {
+    return '' + val
   }
 }
 

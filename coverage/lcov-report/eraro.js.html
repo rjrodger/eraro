@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.31% </span>
+                <span class="strong">77.77% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>65/83</span>
+                <span class='fraction'>63/81</span>
             </div>
         
             
@@ -311,15 +311,7 @@
 <a name='L246'></a><a href='#L246'>246</a>
 <a name='L247'></a><a href='#L247'>247</a>
 <a name='L248'></a><a href='#L248'>248</a>
-<a name='L249'></a><a href='#L249'>249</a>
-<a name='L250'></a><a href='#L250'>250</a>
-<a name='L251'></a><a href='#L251'>251</a>
-<a name='L252'></a><a href='#L252'>252</a>
-<a name='L253'></a><a href='#L253'>253</a>
-<a name='L254'></a><a href='#L254'>254</a>
-<a name='L255'></a><a href='#L255'>255</a>
-<a name='L256'></a><a href='#L256'>256</a>
-<a name='L257'></a><a href='#L257'>257</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L249'></a><a href='#L249'>249</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -390,7 +382,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
@@ -409,10 +400,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
@@ -549,13 +536,10 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -639,14 +623,13 @@ function eraro(options) {
   <span class="missing-if-branch" title="else path not taken" >E</span>if (filename) {
     markers.push(filename)
   }
-  
-  const errormaker = function(ex, code, msg, details) {
+&nbsp;
+  const errormaker = function (ex, code, msg, details) {
     if (Util.isError(ex)) {
       if (ex.eraro &amp;&amp; !options.override) {
         return ex
       }
-    }
-    else {
+    } else {
       ex = null
       code = arguments[0]
       msg = arguments[1]
@@ -665,11 +648,7 @@ function eraro(options) {
         : 'unknown'
 &nbsp;
     details =
-      'object' === typeof details
-        ? details
-        : 'object' === typeof msg &amp;&amp; 'string' !== typeof msg
-        ? msg
-        : {}
+      'object' === typeof details ? details : 'object' === typeof msg ? msg : {}
 &nbsp;
     if (ex) {
       details.errmsg = ex.message
@@ -685,7 +664,7 @@ function eraro(options) {
       inspect,
       code,
       details,
-      ex
+      ex,
     )
 &nbsp;
     const err = new Error(msg)
@@ -718,7 +697,7 @@ function eraro(options) {
 &nbsp;
   errormaker.callpoint = callpoint
 &nbsp;
-  errormaker.has = function(code) {
+  errormaker.has = function (code) {
     return !!msgmap[code]
   }
 &nbsp;
@@ -741,7 +720,7 @@ function callpoint(error, markers) {
   <span class="missing-if-branch" title="else path not taken" >E</span>if (stack) {
     const lines = stack.split('\n')
     let i = 0
-    
+&nbsp;
     line_loop: for (i = 1; i &lt; lines.length; i++) {
       const line = lines[i]
 &nbsp;
@@ -783,10 +762,10 @@ function buildmessage(
   msg,
   msgmap,
   msgprefix,
-  inspect,
+  _inspect,
   code,
   details,
-  ex
+  ex,
 ) {
   let message =
     msgprefix +
@@ -801,26 +780,23 @@ function buildmessage(
   // These are the inserts.
   let valmap = Object.assign({}, details, { code: code })
 &nbsp;
-  message = message.replace(/&lt;%=\s*(.*?)\s*%&gt;/g,(m,p1)=&gt;{
+  message = message.replace(/&lt;%=\s*(.*?)\s*%&gt;/g, (m, p1) =&gt; {
     let val = valmap[p1]
-    val = 'object' === typeof val &amp;&amp; null != val ?
-      stringify(val)
-      : val
+    val = 'object' === typeof val &amp;&amp; null != val ? stringify(val) : val
 &nbsp;
     return val
   })
-    
+&nbsp;
   return message
 }
 &nbsp;
-&nbsp;
 function stringify(val) {
   try {
-    return JSON.stringify(val).substring(0,111)
-      .replace(/([^\\])"/g,'$1')
-  }
-  catch(e) {
-<span class="cstat-no" title="statement not covered" >    return ''+val</span>
+    return JSON.stringify(val)
+      .substring(0, 111)
+      .replace(/([^\\])"/g, '$1')
+  } catch (e) {
+<span class="cstat-no" title="statement not covered" >    return '' + val</span>
   }
 }
 &nbsp;
@@ -838,7 +814,7 @@ function originalmsg(override, ex) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-09-11T13:52:16.134Z
+                at 2023-09-11T14:29:59.025Z
             </div>
         <script src="prettify.js"></script>
         <script>

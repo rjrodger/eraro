@@ -4,6 +4,10 @@ eraro
 [![npm version][npm-badge]][npm-url]
 [![build](https://github.com/rjrodger/eraro/actions/workflows/build.yml/badge.svg)](https://github.com/rjrodger/eraro/actions/workflows/build.yml)
 [![Coverage Status][coveralls-badge]][coveralls-url]
+[![DeepScan grade](https://deepscan.io/api/teams/5016/projects/25452/branches/796922/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=5016&pid=25452&bid=796922)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d07c5eb44d302778bc18/maintainability)](https://codeclimate.com/github/rjrodger/eraro/maintainability)
+
+
 
 #### Create JavaScript Error objects with code strings, context details, and templated messages.
 

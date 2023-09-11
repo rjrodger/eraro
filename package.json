@@ -1,17 +1,18 @@
 {
   "name": "eraro",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "description": "Create JavaScript Error objects with code strings, context details, and templated messages.",
   "main": "eraro.js",
   "scripts": {
     "test": "jest --coverage",
     "test-some": "jest -t",
     "test-watch": "jest --coverage --watchAll",
-    "prettier": "prettier --write --no-semi --single-quote *.js lib/*.js test/*.js",
+    "prettier": "prettier --write --no-semi --single-quote *.js test/*.js",
     "clean": "rm -rf node_modules package-lock.json yarn.lock",
     "reset": "npm run clean && npm i && npm test && npm audit --production",
     "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
-    "repo-publish": "npm run prettier && npm test && npm run repo-tag --registry http://registry.npmjs.org && npm publish --registry http://registry.npmjs.org "
+    "repo-publish": "npm run reset && npm run repo-publish-quick",
+    "repo-publish-quick": "npm run prettier && npm test && npm run repo-tag --registry http://registry.npmjs.org && npm publish --registry http://registry.npmjs.org "
   },
   "repository": {
     "type": "git",

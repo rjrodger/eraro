@@ -1,13 +1,12 @@
 /* Copyright (c) 2014-2023 Richard Rodger and other contributors, MIT License */
 'use strict'
 
-
 const Eraro = require('..')
 const eraro = Eraro({
   package: 'foo',
   msgmap: {
-    c401: 'C401 Message'
-  }
+    c401: 'C401 Message',
+  },
 })
 
 function describeError(err) {
@@ -16,11 +15,11 @@ function describeError(err) {
     code: err.code,
     package: err.package,
     msg: err.msg,
-    details: err.details
+    details: err.details,
   }
 }
 
-describe('eraro', function() {
+describe('eraro', function () {
   test('basic error', () => {
     const e1 = eraro('c1', 'm1 a:<%=a%>', { a: 1 })
 
@@ -44,7 +43,7 @@ describe('eraro', function() {
         code: 'c2',
         package: 'foo',
         msg: 'foo: c2',
-        details: { a: 2 }
+        details: { a: 2 },
       })
     })
 
@@ -55,7 +54,7 @@ describe('eraro', function() {
         code: 'c3',
         package: 'foo',
         msg: 'foo: c3',
-        details: {}
+        details: {},
       })
     })
 
@@ -66,7 +65,7 @@ describe('eraro', function() {
         code: 'unknown',
         package: 'foo',
         msg: 'foo: unknown',
-        details: {}
+        details: {},
       })
     })
 
@@ -77,12 +76,12 @@ describe('eraro', function() {
         code: 'c41',
         package: 'foo',
         msg: 'foo: c41',
-        details: {}
+        details: {},
       })
     })
   })
 
-  describe('wrap an error in details', function() {
+  describe('wrap an error in details', function () {
     test('simple error', () => {
       const err = new Error('x0')
       const erraror = eraro(err)
@@ -96,7 +95,7 @@ describe('eraro', function() {
         code: 'x0',
         package: 'foo',
         msg: 'foo: x0',
-        details: { errmsg: 'x0', orig$: err, message$: 'x0' }
+        details: { errmsg: 'x0', orig$: err, message$: 'x0' },
       }) //  "[Error: x0]"
     })
 
@@ -113,7 +112,7 @@ describe('eraro', function() {
         code: 'c4',
         package: 'foo',
         msg: 'foo: x1',
-        details: { errmsg: 'x1', orig$: err, message$: 'x1' }
+        details: { errmsg: 'x1', orig$: err, message$: 'x1' },
       }) // "[Error: x1]"
       expect(erraror.orig).toEqual(err)
     })
@@ -131,7 +130,7 @@ describe('eraro', function() {
         code: 'c401',
         package: 'foo',
         msg: 'foo: C401 Message',
-        details: { errmsg: 'x11', orig$: err, message$: 'x11' }
+        details: { errmsg: 'x11', orig$: err, message$: 'x11' },
       })
       expect(erraror.orig).toEqual(err)
     })
@@ -149,22 +148,23 @@ describe('eraro', function() {
         code: 'c5',
         package: 'foo',
         msg: 'foo: x2',
-        details: { errmsg: 'x2', a: 3, orig$: err, message$: 'x2' }
+        details: { errmsg: 'x2', a: 3, orig$: err, message$: 'x2' },
       }) // [Error: x2]
     })
   })
 
-  
   test('handle templates', () => {
-    let te0 = eraro('te0', 'A <%=a%> <%=c%><%= d %> B',
-                    { a: { b: 99,e:[true,false] }, c:'CCC', d:1 })
+    let te0 = eraro('te0', 'A <%=a%> <%=c%><%= d %> B', {
+      a: { b: 99, e: [true, false] },
+      c: 'CCC',
+      d: 1,
+    })
     expect(te0.message).toEqual('foo: A {b:99,e:[true,false]} CCC1 B')
 
     let te1 = eraro('te1', '<%=code%><%=NotAVal%>')
     expect(te1.message).toEqual('foo: te1undefined')
   })
 
-  
   test('handle different erraros', () => {
     const fooEraro = Eraro({ package: 'barfoo', prefix: 'FOO-' })
     expect(fooEraro('code0').message).toEqual('FOO-code0')
