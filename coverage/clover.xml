@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1694442599045" clover="3.2.0">
-  <project timestamp="1694442599045" name="All files">
+<coverage generated="1699192457086" clover="3.2.0">
+  <project timestamp="1699192457086" name="All files">
     <metrics statements="76" coveredstatements="74" conditionals="81" coveredconditionals="63" methods="8" coveredmethods="8" elements="165" coveredelements="145" complexity="0" loc="76" ncloc="76" packages="1" files="1" classes="1"/>
     <file name="eraro.js" path="/Users/richard/Projects/rjrodger/eraro/eraro.js">
       <metrics statements="76" coveredstatements="74" conditionals="81" coveredconditionals="63" methods="8" coveredmethods="8"/>
