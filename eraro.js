@@ -8,6 +8,12 @@
 // #### System modules
 const Util = require('util')
 
+// Use Error.isError (Node 24+) when available, fall back to Util.types.isNativeError
+const isNativeError =
+  typeof Error.isError === 'function'
+    ? Error.isError
+    : Util.types.isNativeError
+
 // #### Exports
 module.exports = eraro
 
@@ -64,7 +70,7 @@ function eraro(options) {
   }
 
   const errormaker = function (ex, code, msg, details) {
-    if (Util.isError(ex)) {
+    if (isNativeError(ex)) {
       if (ex.eraro && !options.override) {
         return ex
       }
