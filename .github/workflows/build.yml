@@ -18,7 +18,7 @@ jobs:
       matrix:
         # FIX: windows-latest
         os: [ubuntu-latest, macos-latest]
-        node-version: [20.x, 18.x, 16.x]
+        node-version: [24.x, 22.x, 20.x, 18.x]
 
     runs-on: ${{ matrix.os }} 
         
@@ -32,8 +32,3 @@ jobs:
     - run: npm run build --if-present
     - run: npm run test
 
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./coverage/lcov.info
