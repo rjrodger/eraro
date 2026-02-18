@@ -2,17 +2,17 @@
   "name": "eraro",
   "version": "3.0.1",
   "description": "Create JavaScript Error objects with code strings, context details, and templated messages.",
-  "main": "eraro.js",
+  "main": "dist/eraro.js",
+  "types": "dist/eraro.d.ts",
   "scripts": {
-    "test": "jest --coverage",
-    "test-some": "jest -t",
-    "test-watch": "jest --coverage --watchAll",
-    "prettier": "prettier --write --no-semi --single-quote *.js test/*.js",
-    "clean": "rm -rf node_modules package-lock.json yarn.lock",
+    "build": "tsc",
+    "test": "npm run build && node --test",
+    "test-some": "node --test --test-name-pattern",
+    "clean": "rm -rf node_modules package-lock.json yarn.lock dist",
     "reset": "npm run clean && npm i && npm test && npm audit --production",
     "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
     "repo-publish": "npm run reset && npm run repo-publish-quick",
-    "repo-publish-quick": "npm run prettier && npm test && npm run repo-tag --registry http://registry.npmjs.org && npm publish --registry https://registry.npmjs.org "
+    "repo-publish-quick": "npm test && npm run repo-tag --registry http://registry.npmjs.org && npm publish --registry https://registry.npmjs.org "
   },
   "repository": {
     "type": "git",
@@ -33,13 +33,12 @@
   },
   "homepage": "https://github.com/rjrodger/eraro",
   "files": [
+    "dist/",
     "README.md",
-    "LICENSE.txt",
-    "eraro.js"
+    "LICENSE.txt"
   ],
   "devDependencies": {
-    "jest": "^29.7.0",
-    "coveralls": "^3.1.1",
-    "prettier": "^3.0.3"
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
   }
 }
