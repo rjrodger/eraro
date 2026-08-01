@@ -108,10 +108,15 @@ function eraro(options?: EraroOptions): ErrorMaker {
               : 'unknown'
           : 'unknown'
 
+    // NOTE: `typeof null === 'object'`, so an explicit null in the details
+    // (or message) argument slot must be excluded here, otherwise the
+    // `details.errmsg`/`details.errline` writes below - and the
+    // `details.errline` read when building `err.callpoint` - dereference
+    // null and throw.
     details =
-      'object' === typeof details
+      'object' === typeof details && null != details
         ? details
-        : 'object' === typeof msg
+        : 'object' === typeof msg && null != msg
           ? (msg as Record<string, any>)
           : {}
 

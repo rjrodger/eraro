@@ -175,4 +175,39 @@ describe('eraro', function () {
     const barEraro = Eraro({ package: 'bar', prefix: false })
     assert.strictEqual(barEraro('code1').message, 'code1')
   })
+
+  // Regression: `typeof null === 'object'`, so an explicit null in the
+  // details slot used to slip past the object guard and then crash on
+  // `details.errmsg`/`details.errline` (seen in the wild as Seneca's
+  // outward error pipeline: "Cannot read properties of null (reading
+  // 'errline')").
+  describe('null details argument does not crash', () => {
+    test('code + msg + null details', () => {
+      const e = eraro('c1', 'm1', null)
+      assert.strictEqual(e.code, 'c1')
+      assert.deepStrictEqual(e.details, {})
+    })
+
+    test('code + null (details slot via msg)', () => {
+      const e = eraro('c1', null)
+      assert.strictEqual(e.code, 'c1')
+      assert.deepStrictEqual(e.details, {})
+    })
+
+    test('original error + code + msg + null details', () => {
+      const orig = new Error('boom')
+      const e = eraro(orig, 'c1', 'm1', null)
+      assert.strictEqual(e.code, 'c1')
+      assert.strictEqual(e.orig, orig)
+      assert.strictEqual(e.details.errmsg, 'boom')
+      assert.strictEqual(typeof e.details.errline, 'string')
+    })
+
+    test('original error + code + null (details slot via msg)', () => {
+      const orig = new Error('boom')
+      const e = eraro(orig, 'c1', null)
+      assert.strictEqual(e.code, 'c1')
+      assert.strictEqual(e.details.errmsg, 'boom')
+    })
+  })
 })
